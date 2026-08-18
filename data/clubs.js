@@ -78,6 +78,14 @@ const CLUBS = [
     lastKnown: 0.97,
   },
   {
+    id: 'braga', name: 'SC Braga', short: 'SCB', country: 'Portugal',
+    symbol: 'SCB.LS', exchange: 'Euronext LIS', ccy: 'EUR', sharesM: 1.2, color: '#E4231F',
+    revenueEurM: 34.5, revIncl: 69.8, revFY: '2024/25',
+    note: 'QSI (Qatar) holds ~30% of the SAD; microscopic free float — the market cap bears no relation to the ~€80M QSI paid for its stake in 2022. FY24/25 swung to an €11M loss on Europa League instead of Champions League money.',
+    approx: true,
+    lastKnown: 23.0,
+  },
+  {
     id: 'fener', name: 'Fenerbahçe', short: 'FEN', country: 'Türkiye',
     symbol: 'FENER.IS', exchange: 'Borsa Istanbul', ccy: 'TRY', sharesM: 6250, color: '#FFE10A',
     revenueEurM: 245, revFY: '2025/26',
@@ -128,7 +136,7 @@ const CLUBS = [
   },
   {
     id: 'aab', name: 'AaB Aalborg', short: 'AAB', country: 'Denmark',
-    symbol: 'AAB.CO', exchange: 'Nasdaq CPH', ccy: 'DKK', sharesM: 3.23, color: '#E4002B',
+    symbol: 'AAB.CO', exchange: 'Nasdaq CPH', ccy: 'DKK', sharesM: 2.69, color: '#E4002B',
     revenueEurM: 10, revFY: '2025',
     note: 'Danish Superliga; one of the smallest football listings in Europe.',
     lastKnown: 26.6,
@@ -184,7 +192,7 @@ const CLUBS = [
   },
   {
     id: 'bali', name: 'Bali United', short: 'BOLA', country: 'Indonesia',
-    symbol: 'BOLA.JK', exchange: 'IDX Jakarta', ccy: 'IDR', sharesM: 7300, color: '#D71920',
+    symbol: 'BOLA.JK', exchange: 'IDX Jakarta', ccy: 'IDR', sharesM: 6000, color: '#D71920',
     revenueEurM: null, revFY: null,
     note: 'Asia’s flagship club listing (2019). Persib and Persija IPOs were slated for Jul 2026 but did not complete.', approx: true,
     lastKnown: 148.0,
