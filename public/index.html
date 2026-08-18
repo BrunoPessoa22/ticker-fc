@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="/styles.css?v=3">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='42' fill='none' stroke='%232FBF71' stroke-width='9'/><path d='M50 26l19 14-7 22H38l-7-22z' fill='%23EAF1E6'/></svg>">
 </head>
 <body>
@@ -27,6 +27,7 @@
       <h2 class="section-title">The listed league</h2>
       <div class="sorters" role="group" aria-label="Sort table">
         <button class="sorter is-active" data-sort="mcap">Market cap</button>
+        <button class="sorter" data-sort="evrev">EV / revenue</button>
         <button class="sorter" data-sort="mcrev">Cap / revenue</button>
         <button class="sorter" data-sort="day">24h move</button>
       </div>
@@ -41,13 +42,14 @@
             <th class="col-num">24h</th>
             <th class="col-num">Mkt cap</th>
             <th class="col-num col-rev">Revenue</th>
-            <th class="col-num">Cap/Rev</th>
+            <th class="col-num col-caprev">Cap/Rev</th>
+            <th class="col-num">EV/Rev</th>
           </tr>
         </thead>
         <tbody id="rows"></tbody>
       </table>
     </div>
-    <p class="table-note">Market caps in EUR, computed live from price × shares (18 Aug 2026 share-count snapshot). Revenue = FY2024-25 club accounts, excluding player-trading income where the club separates it. ○ marks stale or approximate share counts. Prices delayed 15-20 min (Yahoo Finance).</p>
+    <p class="table-note">Market caps in EUR, computed live from price × shares (18 Aug 2026 share-count snapshot). Revenue = FY2024-25 club accounts, excluding player-trading income where the club separates it. EV = market cap + net financial debt (latest accounts; net cash reduces it) — the multiple that actually compares clubs across capital structures. ○ marks stale or approximate share counts; — means the figure isn't disclosed. Prices delayed 15-20 min (Yahoo Finance).</p>
   </section>
 
   <section class="graveyard" aria-label="No longer on the exchange">
@@ -95,14 +97,18 @@
 
   <dl class="fund-grid">
     <div><dt>Market cap</dt><dd id="fCap"></dd></div>
+    <div><dt>Net debt</dt><dd id="fDebt"></dd></div>
+    <div><dt>Enterprise value</dt><dd id="fEv"></dd></div>
     <div><dt>Revenue <span id="fRevFY"></span></dt><dd id="fRev"></dd></div>
+    <div><dt>EV / revenue</dt><dd id="fEvRev"></dd></div>
     <div><dt>Cap / revenue</dt><dd id="fMult"></dd></div>
-    <div><dt>Exchange</dt><dd id="fExch"></dd></div>
+    <div><dt>Net result <span id="fResFY"></span></dt><dd id="fResult"></dd></div>
+    <div><dt>vs 52-wk high</dt><dd id="f52"></dd></div>
   </dl>
   <p class="fund-note" id="fNote"></p>
 </aside>
 
-<script src="/vendor/lightweight-charts.standalone.production.js"></script>
-<script src="/app.js"></script>
+<script src="/vendor/lightweight-charts.standalone.production.js?v=1"></script>
+<script src="/app.js?v=3"></script>
 </body>
 </html>

@@ -221,7 +221,7 @@ main { max-width: 1080px; margin: 0 auto; padding: 0 20px 60px; }
 .fund-note { margin-top: 16px; font-size: 13px; color: var(--muted); max-width: 60ch; }
 
 @media (max-width: 700px) {
-  .col-rev, .td-rev { display: none; }
+  .col-rev, .td-rev, .col-caprev, .td-caprev { display: none; }
   .standings { min-width: 520px; }
   .drawer { padding: 18px 16px 30px; }
   .big-price { font-size: 32px; }

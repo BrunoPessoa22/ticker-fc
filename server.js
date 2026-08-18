@@ -7,7 +7,9 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.disable('x-powered-by');
-app.use(express.static(path.join(__dirname, 'public'), { maxAge: '1h', index: 'index.html' }));
+// maxAge 0 + ETag: browsers revalidate every asset (cheap 304s), so a deploy
+// never serves stale JS against new HTML.
+app.use(express.static(path.join(__dirname, 'public'), { maxAge: 0, etag: true, index: 'index.html' }));
 
 const CLUB_BY_ID = new Map(CLUBS.map((c) => [c.id, c]));
 
@@ -45,10 +47,16 @@ app.get('/api/clubs', async (_req, res) => {
       const mcapLocalM = price != null ? price * c.sharesM : null;
       const mcapEurM = toEur(mcapLocalM, c.ccy, rates);
       const mcRev = mcapEurM != null && c.revenueEurM ? mcapEurM / c.revenueEurM : null;
+      // EV = market cap + net financial debt (negative net debt = net cash).
+      const netDebtEurM = c.netDebtEurM ?? null;
+      const evEurM = mcapEurM != null && netDebtEurM != null ? mcapEurM + netDebtEurM : null;
+      const evRev = evEurM != null && c.revenueEurM ? evEurM / c.revenueEurM : null;
       return {
         id: c.id, name: c.name, short: c.short, country: c.country,
         symbol: c.symbol, exchange: c.exchange, ccy: c.ccy, color: c.color,
-        price, dayPct, mcapEurM, mcRev,
+        price, dayPct, mcapEurM, mcRev, netDebtEurM, evEurM, evRev,
+        netResultEurM: c.netResultEurM ?? null,
+        high52: q?.high52 ?? null, low52: q?.low52 ?? null,
         revenueEurM: c.revenueEurM, revIncl: c.revIncl ?? null, revFY: c.revFY,
         note: c.note, approx: !!c.approx,
         live: !!q, marketTime: q?.marketTime ?? null,

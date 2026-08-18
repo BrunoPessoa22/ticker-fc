@@ -67,6 +67,8 @@
     const total = caps.reduce((a, b) => a + b, 0);
     const mults = clubs.map((c) => c.mcRev).filter((v) => v != null).sort((a, b) => a - b);
     const median = mults.length ? mults[Math.floor(mults.length / 2)] : null;
+    const evMults = clubs.map((c) => c.evRev).filter((v) => v != null).sort((a, b) => a - b);
+    const evMedian = evMults.length ? evMults[Math.floor(evMults.length / 2)] : null;
     // Illiquid micro-caps (approx) gap wildly between rare trades — keep them out of the movers strip.
     const movers = clubs.filter((c) => c.dayPct != null && !c.approx);
     const best = movers.reduce((a, b) => (b.dayPct > (a?.dayPct ?? -1e9) ? b : a), null);
@@ -75,6 +77,7 @@
       <dl class="fact"><dd>${clubs.length}</dd><dt>clubs listed</dt></dl>
       <dl class="fact"><dd>${fmtEurM(total)}</dd><dt>combined market cap</dt></dl>
       <dl class="fact"><dd>${fmtMult(median)}</dd><dt>median cap / revenue</dt></dl>
+      <dl class="fact"><dd>${fmtMult(evMedian)}</dd><dt>median EV / revenue</dt></dl>
       ${best ? `<dl class="fact"><dd class="${pctClass(best.dayPct)}">${best.short} ${fmtPct(best.dayPct)}</dd><dt>top 24h</dt></dl>` : ''}
       ${worst ? `<dl class="fact"><dd class="${pctClass(worst.dayPct)}">${worst.short} ${fmtPct(worst.dayPct)}</dd><dt>bottom 24h</dt></dl>` : ''}`;
   }
@@ -83,6 +86,7 @@
   const sortFns = {
     mcap: (a, b) => (b.mcapEurM ?? -1) - (a.mcapEurM ?? -1),
     mcrev: (a, b) => (b.mcRev ?? -1) - (a.mcRev ?? -1),
+    evrev: (a, b) => (b.evRev ?? -1) - (a.evRev ?? -1),
     day: (a, b) => (b.dayPct ?? -1e9) - (a.dayPct ?? -1e9),
   };
 
@@ -97,7 +101,8 @@
         <td class="td-num ${pctClass(c.dayPct)}">${fmtPct(c.dayPct)}</td>
         <td class="td-num">${fmtEurM(c.mcapEurM)}${c.approx ? '<span class="approx-mark" title="approximate share count">○</span>' : ''}</td>
         <td class="td-num td-rev">${c.revenueEurM ? `${fmtEurM(c.revenueEurM)}` : '—'}</td>
-        <td class="td-num td-mult">${fmtMult(c.mcRev)}</td>
+        <td class="td-num td-caprev">${fmtMult(c.mcRev)}</td>
+        <td class="td-num td-mult">${fmtMult(c.evRev)}</td>
       </tr>`).join('');
     $('rows').innerHTML = rows;
   }
@@ -139,7 +144,21 @@
       : 'not disclosed';
     $('fRevFY').textContent = selected.revFY ? `FY${selected.revFY}` : '';
     $('fMult').textContent = fmtMult(selected.mcRev);
-    $('fExch').textContent = selected.exchange;
+    const nd = selected.netDebtEurM;
+    $('fDebt').textContent = nd == null ? 'n/d' : nd < 0 ? `net cash ${fmtEurM(-nd)}` : fmtEurM(nd);
+    $('fEv').textContent = fmtEurM(selected.evEurM);
+    $('fEvRev').textContent = fmtMult(selected.evRev);
+    const nr = selected.netResultEurM;
+    const resEl = $('fResult');
+    resEl.textContent = nr == null ? 'n/d' : (nr >= 0 ? '+' : '−') + fmtEurM(Math.abs(nr));
+    resEl.className = nr == null ? '' : nr >= 0 ? 'pct-up' : 'pct-down';
+    $('fResFY').textContent = nr != null && selected.revFY ? `FY${selected.revFY}` : '';
+    const el52 = $('f52');
+    if (selected.price != null && selected.high52) {
+      const off = ((selected.price - selected.high52) / selected.high52) * 100;
+      el52.textContent = fmtPct(off);
+      el52.className = pctClass(off);
+    } else { el52.textContent = 'n/d'; el52.className = ''; }
     $('fNote').textContent = selected.note || '';
   }
 
