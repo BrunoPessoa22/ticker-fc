@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ticker FC — the football stock market</title>
+<meta name="description" content="Every publicly listed football club on one page: live prices, crypto-style charts, market caps and revenue multiples.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='42' fill='none' stroke='%232FBF71' stroke-width='9'/><path d='M50 26l19 14-7 22H38l-7-22z' fill='%23EAF1E6'/></svg>">
+</head>
+<body>
+
+<div class="tape" id="tape" aria-hidden="true"><div class="tape-track" id="tapeTrack"></div></div>
+
+<header class="masthead">
+  <h1 class="wordmark">TICKER&nbsp;FC</h1>
+  <p class="tagline">Every publicly listed football club, priced live.</p>
+  <div class="headline-facts" id="facts"></div>
+</header>
+
+<main>
+  <section class="league" aria-label="Listed clubs">
+    <div class="league-bar">
+      <h2 class="section-title">The listed league</h2>
+      <div class="sorters" role="group" aria-label="Sort table">
+        <button class="sorter is-active" data-sort="mcap">Market cap</button>
+        <button class="sorter" data-sort="mcrev">Cap / revenue</button>
+        <button class="sorter" data-sort="day">24h move</button>
+      </div>
+    </div>
+    <div class="table-scroll">
+      <table class="standings">
+        <thead>
+          <tr>
+            <th class="col-pos">#</th>
+            <th class="col-club">Club</th>
+            <th class="col-num">Price</th>
+            <th class="col-num">24h</th>
+            <th class="col-num">Mkt cap</th>
+            <th class="col-num col-rev">Revenue</th>
+            <th class="col-num">Cap/Rev</th>
+          </tr>
+        </thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+    <p class="table-note">Market caps in EUR, computed live from price × shares (18 Aug 2026 share-count snapshot). Revenue = FY2024-25 club accounts, excluding player-trading income where the club separates it. ○ marks stale or approximate share counts. Prices delayed 15-20 min (Yahoo Finance).</p>
+  </section>
+
+  <section class="graveyard" aria-label="No longer on the exchange">
+    <h2 class="section-title">Off the exchange</h2>
+    <div class="graveyard-grid" id="graveyard"></div>
+  </section>
+
+  <footer class="foot">
+    <p>Fundamentals compiled 18 Aug 2026 from FY2024-25 club accounts (Turkish clubs FY to May 2026, inflation-restated). Listed entities are often football subsidiaries with thin free floats — a market cap here is a price, not a valuation. Nothing on this page is investment advice.</p>
+    <p>Built by Bruno Pessoa · <a href="https://brunopessoa.com">brunopessoa.com</a></p>
+  </footer>
+</main>
+
+<div class="drawer-scrim" id="scrim" hidden></div>
+<aside class="drawer" id="drawer" hidden aria-label="Club detail">
+  <header class="drawer-head">
+    <div>
+      <div class="drawer-club"><span class="chip" id="dChip"></span><span id="dName"></span></div>
+      <div class="drawer-meta" id="dMeta"></div>
+    </div>
+    <button class="drawer-close" id="dClose" aria-label="Close">×</button>
+  </header>
+
+  <div class="drawer-price">
+    <span class="big-price" id="dPrice"></span>
+    <span class="big-change" id="dChange"></span>
+  </div>
+
+  <div class="range-bar" role="group" aria-label="Chart range">
+    <button class="range-btn is-active" data-range="1d">24H</button>
+    <button class="range-btn" data-range="5d">5D</button>
+    <button class="range-btn" data-range="1mo">1M</button>
+    <button class="range-btn" data-range="6mo">6M</button>
+    <button class="range-btn" data-range="1y">1Y</button>
+    <button class="range-btn" data-range="max">MAX</button>
+    <button class="range-btn range-future" data-future aria-pressed="false">FUTURE</button>
+  </div>
+
+  <div class="chart-wrap">
+    <div id="chart"></div>
+    <div class="chart-tip" id="chartTip" hidden></div>
+    <div class="chart-status" id="chartStatus" hidden></div>
+  </div>
+  <p class="future-note" id="futureNote" hidden>Projection = historical drift ± 1σ cone extrapolated from the visible range. A toy, not advice.</p>
+
+  <dl class="fund-grid">
+    <div><dt>Market cap</dt><dd id="fCap"></dd></div>
+    <div><dt>Revenue <span id="fRevFY"></span></dt><dd id="fRev"></dd></div>
+    <div><dt>Cap / revenue</dt><dd id="fMult"></dd></div>
+    <div><dt>Exchange</dt><dd id="fExch"></dd></div>
+  </dl>
+  <p class="fund-note" id="fNote"></p>
+</aside>
+
+<script src="/vendor/lightweight-charts.standalone.production.js"></script>
+<script src="/app.js"></script>
+</body>
+</html>

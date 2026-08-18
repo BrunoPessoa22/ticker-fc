@@ -1,0 +1,209 @@
+// Club registry — fundamentals from FY2024-25 club accounts (year ended 30 Jun 2025
+// unless noted), compiled 18 Aug 2026. Prices/market caps are computed live from
+// Yahoo Finance quotes x sharesM. sharesM derived from the 18 Aug 2026 market-cap
+// snapshot at that day's price, so live MC tracks price moves but inherits any
+// snapshot error; approx:true marks clubs where the snapshot itself was stale.
+// revenueEurM excludes player-trading income where the club separates it
+// (revIncl notes the all-in figure).
+
+const CLUBS = [
+  {
+    id: 'manu', name: 'Manchester United', short: 'MANU', country: 'England',
+    symbol: 'MANU', exchange: 'NYSE', ccy: 'USD', sharesM: 172.3, color: '#DA291C',
+    revenueEurM: 779, revFY: '2024/25',
+    note: 'Dual-class shares (Glazers + Ratcliffe control); tiny free float. Net debt >$1B after the 2026 summer window — EV/Revenue is far above the equity multiple.',
+    lastKnown: 23.51,
+  },
+  {
+    id: 'bvb', name: 'Borussia Dortmund', short: 'BVB', country: 'Germany',
+    symbol: 'BVB.DE', exchange: 'Xetra', ccy: 'EUR', sharesM: 110.2, color: '#FDE100',
+    revenueEurM: 526, revFY: '2024/25',
+    note: 'Only listed Bundesliga club. Record revenue year; low debt, 53% equity ratio.',
+    lastKnown: 3.15,
+  },
+  {
+    id: 'celtic', name: 'Celtic', short: 'CEL', country: 'Scotland',
+    symbol: 'CCP.L', exchange: 'LSE AIM', ccy: 'GBp', sharesM: 95.1, color: '#018749',
+    revenueEurM: 168, revFY: '2024/25',
+    note: 'Net cash £77M (~40% of market cap). FY25 was a Champions League peak year; revenue is fading after missing the 2025-26 league phase.',
+    lastKnown: 199.5,
+  },
+  {
+    id: 'ajax', name: 'AFC Ajax', short: 'AJA', country: 'Netherlands',
+    symbol: 'AJAX.AS', exchange: 'Euronext AMS', ccy: 'EUR', sharesM: 18.33, color: '#D2122E',
+    revenueEurM: 178, revFY: '2024/25',
+    note: 'Historically net cash; FY24/25 net loss €37M. Majority supporter-controlled, thin free float.',
+    lastKnown: 9.0,
+  },
+  {
+    id: 'eagle', name: 'Eagle Football (Lyon)', short: 'OL', country: 'France',
+    symbol: 'EFG.PA', exchange: 'Euronext PAR', ccy: 'EUR', sharesM: 176.0, color: '#1B3B8B',
+    revenueEurM: 162, revIncl: 274, revFY: '2024/25',
+    note: 'Ex OL Groupe. Net debt ~€600M+ — enterprise value is ~3x the market cap; Michele Kang era after the 2025 DNCG scare.',
+    lastKnown: 1.83,
+  },
+  {
+    id: 'juve', name: 'Juventus', short: 'JUV', country: 'Italy',
+    symbol: 'JUVE.MI', exchange: 'Borsa Italiana', ccy: 'EUR', sharesM: 417.0, color: '#FFFFFF',
+    revenueEurM: 439, revIncl: 529, revFY: '2024/25',
+    note: 'Exor ~65%; the only continental club stock with real institutional float. Net financial debt €280M.',
+    lastKnown: 2.068,
+  },
+  {
+    id: 'lazio', name: 'SS Lazio', short: 'LAZ', country: 'Italy',
+    symbol: 'SSL.MI', exchange: 'Borsa Italiana', ccy: 'EUR', sharesM: 69.0, color: '#87D8F7',
+    revenueEurM: 144, revFY: '2024/25',
+    note: 'Revenue fell ~26% without Champions League football; transfer-market restrictions in play.',
+    lastKnown: 1.625,
+  },
+  {
+    id: 'benfica', name: 'SL Benfica', short: 'BEN', country: 'Portugal',
+    symbol: 'SLBEN.LS', exchange: 'Euronext LIS', ccy: 'EUR', sharesM: 23.0, color: '#E83030',
+    revenueEurM: 231, revIncl: 348, revFY: '2024/25',
+    note: 'Listed entity is the football SAD; club holds the majority, small free float. Record year incl. player sales.',
+    lastKnown: 6.8,
+  },
+  {
+    id: 'porto', name: 'FC Porto', short: 'POR', country: 'Portugal',
+    symbol: 'FCP.LS', exchange: 'Euronext LIS', ccy: 'EUR', sharesM: 22.5, color: '#003E7E',
+    revenueEurM: 150, revIncl: 250, revFY: '2024/25',
+    note: 'Record €39M profit on €171M of player sales — but negative equity and €254M net debt. SAD only, thin float.',
+    lastKnown: 2.84,
+  },
+  {
+    id: 'sporting', name: 'Sporting CP', short: 'SCP', country: 'Portugal',
+    symbol: 'SCP.LS', exchange: 'Euronext LIS', ccy: 'EUR', sharesM: 202.0, color: '#008057',
+    revenueEurM: 148, revIncl: 265, revFY: '2024/25',
+    note: 'Fourth straight profitable year; bank debt cleared in the 2023 restructuring. SAD only, thin float.',
+    lastKnown: 0.97,
+  },
+  {
+    id: 'fener', name: 'Fenerbahçe', short: 'FEN', country: 'Türkiye',
+    symbol: 'FENER.IS', exchange: 'Borsa Istanbul', ccy: 'TRY', sharesM: 6250, color: '#FFE10A',
+    revenueEurM: 245, revFY: '2025/26',
+    note: 'Listed entity is the football subsidiary, not the club. Heavy 2026 dilution; TRY figures are inflation-restated (TAS 29).',
+    lastKnown: 3.16,
+  },
+  {
+    id: 'gala', name: 'Galatasaray', short: 'GS', country: 'Türkiye',
+    symbol: 'GSRAY.IS', exchange: 'Borsa Istanbul', ccy: 'TRY', sharesM: 12990, color: '#FDB913',
+    revenueEurM: 373, revFY: '2025/26',
+    note: 'Only profitable one of Istanbul’s big four — and it trades below 1x revenue despite league dominance. Subsidiary listing; TAS 29 caveat.',
+    lastKnown: 1.06,
+  },
+  {
+    id: 'besiktas', name: 'Beşiktaş', short: 'BJK', country: 'Türkiye',
+    symbol: 'BJKAS.IS', exchange: 'Borsa Istanbul', ccy: 'TRY', sharesM: 4365, color: '#EDEDED',
+    revenueEurM: 127, revFY: '2025/26',
+    note: 'Loss-making with ~23B TRY of debt. Subsidiary listing; TAS 29 caveat.',
+    lastKnown: 2.22,
+  },
+  {
+    id: 'trabzon', name: 'Trabzonspor', short: 'TS', country: 'Türkiye',
+    symbol: 'TSPOR.IS', exchange: 'Borsa Istanbul', ccy: 'TRY', sharesM: 7020, color: '#8A1538',
+    revenueEurM: 71, revFY: '2025/26',
+    note: 'Richest multiple of the Turkish four on the smallest revenue. Subsidiary listing; TAS 29 caveat.',
+    lastKnown: 1.08,
+  },
+  {
+    id: 'parken', name: 'Parken (FC København)', short: 'FCK', country: 'Denmark',
+    symbol: 'PARKEN.CO', exchange: 'Nasdaq CPH', ccy: 'DKK', sharesM: 9.67, color: '#0D2A56',
+    revenueEurM: 253, revFY: '2025',
+    note: 'Most of the revenue is Lalandia resorts, the stadium and offices — FCK football is one segment of a leisure conglomerate.',
+    lastKnown: 213.0,
+  },
+  {
+    id: 'brondby', name: 'Brøndby IF', short: 'BIF', country: 'Denmark',
+    symbol: 'BIF.CO', exchange: 'Nasdaq CPH', ccy: 'DKK', sharesM: 1147, color: '#F6EB16',
+    revenueEurM: 40, revFY: '2024/25',
+    note: 'Pure football stock; record commercial revenue but a DKK 131M pre-tax loss in 24/25.',
+    lastKnown: 0.34,
+  },
+  {
+    id: 'agf', name: 'AGF Aarhus', short: 'AGF', country: 'Denmark',
+    symbol: 'AGF-B.CO', exchange: 'Nasdaq CPH', ccy: 'DKK', sharesM: 539.8, color: '#1B62B5',
+    revenueEurM: 25, revFY: '2024/25',
+    note: 'Multiple inflated by the new-stadium project and a 2025 capital raise.',
+    lastKnown: 1.08,
+  },
+  {
+    id: 'aab', name: 'AaB Aalborg', short: 'AAB', country: 'Denmark',
+    symbol: 'AAB.CO', exchange: 'Nasdaq CPH', ccy: 'DKK', sharesM: 3.23, color: '#E4002B',
+    revenueEurM: 10, revFY: '2025',
+    note: 'Danish Superliga; one of the smallest football listings in Europe.',
+    lastKnown: 26.6,
+  },
+  {
+    id: 'aik', name: 'AIK Fotboll', short: 'AIK', country: 'Sweden',
+    symbol: 'AIK-B.ST', exchange: 'NGM Stockholm', ccy: 'SEK', sharesM: 23.96, color: '#F7D917',
+    revenueEurM: 27, revFY: '2025',
+    note: 'Member-owned parent means no takeover is possible — hence a near-zero multiple on €27M of revenue.',
+    lastKnown: 1.64,
+  },
+  {
+    id: 'ruch', name: 'Ruch Chorzów', short: 'RCH', country: 'Poland',
+    symbol: 'RCW.WA', exchange: 'NewConnect', ccy: 'PLN', sharesM: 81.1, color: '#005CA9',
+    revenueEurM: 5.2, revFY: '2024/25',
+    note: 'Polish second tier; near-zero liquidity.', approx: true,
+    lastKnown: 0.37,
+  },
+  {
+    id: 'gks', name: 'GKS Katowice', short: 'GKS', country: 'Poland',
+    symbol: 'GKS.WA', exchange: 'NewConnect', ccy: 'PLN', sharesM: 101.6, color: '#FDB913',
+    revenueEurM: 9.7, revFY: '2024',
+    note: 'Multi-sport club (football, hockey, volleyball); tiny free float.', approx: true,
+    lastKnown: 0.19,
+  },
+  {
+    id: 'intercity', name: 'CF Intercity', short: 'CITY', country: 'Spain',
+    symbol: 'CITY.MC', exchange: 'BME Growth', ccy: 'EUR', sharesM: 87.0, color: '#C9A227',
+    revenueEurM: null, revFY: null,
+    note: 'Spain’s only listed club (fourth tier), diluting through a €60M convertible program — a death-spiral micro-cap.', approx: true,
+    lastKnown: 0.029,
+  },
+  {
+    id: 'colocolo', name: 'Colo-Colo (Blanco y Negro)', short: 'COL', country: 'Chile',
+    symbol: 'COLO-COLO.SN', exchange: 'Santiago', ccy: 'CLP', sharesM: 76.9, color: '#EDEDED',
+    revenueEurM: null, revFY: null,
+    note: 'Concession company running Colo-Colo; very illiquid.', approx: true,
+    lastKnown: 159.9,
+  },
+  {
+    id: 'azulazul', name: 'U. de Chile (Azul Azul)', short: 'UCH', country: 'Chile',
+    symbol: 'AZUL-AZUL.SN', exchange: 'Santiago', ccy: 'CLP', sharesM: 57.0, color: '#003DA5',
+    revenueEurM: null, revFY: null,
+    note: 'Concession company running Universidad de Chile; very illiquid.', approx: true,
+    lastKnown: 429.99,
+  },
+  {
+    id: 'cruzados', name: 'U. Católica (Cruzados)', short: 'UC', country: 'Chile',
+    symbol: 'CRUZADOS.SN', exchange: 'Santiago', ccy: 'CLP', sharesM: 246.0, color: '#0033A0',
+    revenueEurM: null, revFY: null,
+    note: 'Concession company running Universidad Católica; very illiquid.', approx: true,
+    lastKnown: 82.0,
+  },
+  {
+    id: 'bali', name: 'Bali United', short: 'BOLA', country: 'Indonesia',
+    symbol: 'BOLA.JK', exchange: 'IDX Jakarta', ccy: 'IDR', sharesM: 7300, color: '#D71920',
+    revenueEurM: null, revFY: null,
+    note: 'Asia’s flagship club listing (2019). Persib and Persija IPOs were slated for Jul 2026 but did not complete.', approx: true,
+    lastKnown: 148.0,
+  },
+];
+
+// Currencies the quote engine must be able to convert into EUR.
+// Fetched as EUR{CCY}=X (EUR base) and divided out; GBp handled as GBP/100.
+const FX_CURRENCIES = ['USD', 'GBP', 'TRY', 'DKK', 'SEK', 'PLN', 'CLP', 'IDR'];
+
+// Once-listed or nominally-listed entities that no longer belong in the table.
+const OFF_EXCHANGE = [
+  { name: 'AS Roma', note: 'Taken private by the Friedkin Group; delisted from Borsa Italiana in 2022.' },
+  { name: 'Rangers', note: '51% bought by the Cavenagh / 49ers Enterprises consortium in 2025; shares change hands only via JP Jenkins matched bargains — no exchange listing.' },
+  { name: 'Silkeborg IF', note: 'The listed company sold 80% of the club at end-2024 and renamed itself Papirfabrikken Invest — now a property stock (PFINV.CO).' },
+  { name: 'Birmingham City', note: 'HKEX-listed parent sold its final 51% to Knighthead in Nov 2025 and renamed to ZO Future Group — zero football exposure left.' },
+  { name: 'Esteghlal & Persepolis', note: 'Both technically listed in Tehran since 2022; sanctions and ~15% floats make them uninvestable from abroad.' },
+  { name: 'Ghazl El Mahalla', note: 'Africa’s first club listing (EGX, 2022); the IPO was ~18% subscribed and the stock is effectively dormant.' },
+  { name: 'Brazilian SAFs', note: '117 SAFs exist; none has IPO’d on B3 yet — funding runs through debentures. The obvious next wave.' },
+];
+
+module.exports = { CLUBS, FX_CURRENCIES, OFF_EXCHANGE };
