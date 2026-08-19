@@ -1,0 +1,293 @@
+{
+ "pooled": [
+  {
+   "label": "after WIN",
+   "n": 1528,
+   "mean_bps": 19,
+   "med_bps": -6,
+   "t": 1.96
+  },
+  {
+   "label": "after DRAW",
+   "n": 526,
+   "mean_bps": -109,
+   "med_bps": -60,
+   "t": -7.53
+  },
+  {
+   "label": "after LOSS",
+   "n": 450,
+   "mean_bps": -145,
+   "med_bps": -91,
+   "t": -7.51
+  }
+ ],
+ "surprise": [
+  {
+   "label": "expected win (p>60%) WON ",
+   "n": 955,
+   "mean_bps": -1,
+   "med_bps": -8,
+   "t": -0.08
+  },
+  {
+   "label": "expected win (p>60%) LOST",
+   "n": 99,
+   "mean_bps": -95,
+   "med_bps": -42,
+   "t": -2.52
+  },
+  {
+   "label": "expected win (p>60%) DREW",
+   "n": 183,
+   "mean_bps": -110,
+   "med_bps": -33,
+   "t": -3.73
+  },
+  {
+   "label": "underdog   (p<30%) WON   ",
+   "n": 52,
+   "mean_bps": 174,
+   "med_bps": 176,
+   "t": 3.62
+  },
+  {
+   "label": "underdog   (p<30%) LOST  ",
+   "n": 111,
+   "mean_bps": -89,
+   "med_bps": -31,
+   "t": -3.03
+  }
+ ],
+ "surprise_corr": 0.193,
+ "derby": [
+  {
+   "label": "W",
+   "n": 62,
+   "mean_bps": 165,
+   "med_bps": 89,
+   "t": 3.32
+  },
+  {
+   "label": "L",
+   "n": 63,
+   "mean_bps": -252,
+   "med_bps": -110,
+   "t": -2.42
+  }
+ ],
+ "per_club": {
+  "GSRAY.IS": {
+   "n": "128/28/26",
+   "w": -68,
+   "d": -249,
+   "l": -266,
+   "spread": 198,
+   "beta": 0.45,
+   "r2": 0.05
+  },
+  "FENER.IS": {
+   "n": "122/38/21",
+   "w": 45,
+   "d": -449,
+   "l": -671,
+   "spread": 716,
+   "beta": 0.48,
+   "r2": 0.03
+  },
+  "BJKAS.IS": {
+   "n": "88/51/43",
+   "w": 54,
+   "d": -141,
+   "l": -218,
+   "spread": 272,
+   "beta": 0.53,
+   "r2": 0.05
+  },
+  "TSPOR.IS": {
+   "n": "93/44/45",
+   "w": 66,
+   "d": -244,
+   "l": -222,
+   "spread": 288,
+   "beta": 0.63,
+   "r2": 0.07
+  },
+  "BVB.DE": {
+   "n": "100/30/39",
+   "w": 66,
+   "d": -179,
+   "l": -215,
+   "spread": 281,
+   "beta": 0.69,
+   "r2": 0.13
+  },
+  "JUVE.MI": {
+   "n": "98/58/34",
+   "w": 14,
+   "d": -66,
+   "l": -121,
+   "spread": 135,
+   "beta": 0.73,
+   "r2": 0.11
+  },
+  "SSL.MI": {
+   "n": "90/48/52",
+   "w": 58,
+   "d": -56,
+   "l": -131,
+   "spread": 190,
+   "beta": 0.18,
+   "r2": 0.01
+  },
+  "MANU": {
+   "n": "87/42/60",
+   "w": -23,
+   "d": -22,
+   "l": -46,
+   "spread": 23,
+   "beta": 0.62,
+   "r2": 0.06
+  },
+  "AJAX.AS": {
+   "n": "99/46/26",
+   "w": 13,
+   "d": -28,
+   "l": -78,
+   "spread": 91,
+   "beta": 0.1,
+   "r2": 0.01
+  },
+  "CCP.L": {
+   "n": "145/24/20",
+   "w": 4,
+   "d": 2,
+   "l": -15,
+   "spread": 19,
+   "beta": 0.05,
+   "r2": 0.0
+  },
+  "FCP.LS": {
+   "n": "128/23/19",
+   "w": 22,
+   "d": -79,
+   "l": -20,
+   "spread": 43,
+   "beta": 0.16,
+   "r2": 0.0
+  },
+  "SLBEN.LS": {
+   "n": "123/30/17",
+   "w": 14,
+   "d": -38,
+   "l": -5,
+   "spread": 19,
+   "beta": 0.04,
+   "r2": 0.0
+  },
+  "SCP.LS": {
+   "n": "128/27/15",
+   "w": 38,
+   "d": 53,
+   "l": -104,
+   "spread": 142,
+   "beta": 0.16,
+   "r2": 0.0
+  },
+  "SCB.LS": {
+   "n": "99/37/33",
+   "w": -7,
+   "d": 9,
+   "l": 50,
+   "spread": -57,
+   "beta": 0.2,
+   "r2": 0.0
+  }
+ },
+ "bigmoves": {
+  "GSRAY.IS": {
+   "top_n": 125,
+   "post_match_share": 0.28,
+   "base_share": 0.15,
+   "lift": 1.9
+  },
+  "FENER.IS": {
+   "top_n": 125,
+   "post_match_share": 0.37,
+   "base_share": 0.14,
+   "lift": 2.5
+  },
+  "BJKAS.IS": {
+   "top_n": 125,
+   "post_match_share": 0.25,
+   "base_share": 0.15,
+   "lift": 1.7
+  },
+  "TSPOR.IS": {
+   "top_n": 125,
+   "post_match_share": 0.19,
+   "base_share": 0.15,
+   "lift": 1.3
+  },
+  "BVB.DE": {
+   "top_n": 127,
+   "post_match_share": 0.27,
+   "base_share": 0.13,
+   "lift": 2.0
+  },
+  "JUVE.MI": {
+   "top_n": 127,
+   "post_match_share": 0.24,
+   "base_share": 0.15,
+   "lift": 1.6
+  },
+  "SSL.MI": {
+   "top_n": 126,
+   "post_match_share": 0.21,
+   "base_share": 0.15,
+   "lift": 1.4
+  },
+  "MANU": {
+   "top_n": 125,
+   "post_match_share": 0.13,
+   "base_share": 0.15,
+   "lift": 0.8
+  },
+  "AJAX.AS": {
+   "top_n": 128,
+   "post_match_share": 0.16,
+   "base_share": 0.13,
+   "lift": 1.2
+  },
+  "CCP.L": {
+   "top_n": 126,
+   "post_match_share": 0.16,
+   "base_share": 0.15,
+   "lift": 1.1
+  },
+  "FCP.LS": {
+   "top_n": 127,
+   "post_match_share": 0.2,
+   "base_share": 0.13,
+   "lift": 1.5
+  },
+  "SLBEN.LS": {
+   "top_n": 127,
+   "post_match_share": 0.17,
+   "base_share": 0.13,
+   "lift": 1.2
+  },
+  "SCP.LS": {
+   "top_n": 127,
+   "post_match_share": 0.16,
+   "base_share": 0.13,
+   "lift": 1.2
+  },
+  "SCB.LS": {
+   "top_n": 127,
+   "post_match_share": 0.09,
+   "base_share": 0.13,
+   "lift": 0.7
+  }
+ }
+}
