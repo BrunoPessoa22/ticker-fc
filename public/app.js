@@ -95,8 +95,9 @@
       <tr data-id="${c.id}" tabindex="0" role="button" aria-label="Open ${c.name} chart">
         <td class="td-pos">${i + 1}</td>
         <td class="td-club"><span class="club-line"><span class="chip" style="background:${c.color}"></span>
-          <span><span class="club-name">${c.name}</span><br><span class="club-sub">${c.symbol} · ${c.exchange} · ${c.country}</span></span>
+          <span><span class="club-name">${c.name}</span><br><span class="club-sub">${c.symbol}<span class="sub-exch"> · ${c.exchange}</span> · ${c.country}</span></span>
         </span></td>
+        <td class="td-exch">${c.exchange}</td>
         <td class="td-num td-price">${fmtPrice(c.price)}<span class="ccy">${c.ccy}</span></td>
         <td class="td-num ${pctClass(c.dayPct)}">${fmtPct(c.dayPct)}</td>
         <td class="td-num">${fmtEurM(c.mcapEurM)}${c.approx ? '<span class="approx-mark" title="approximate share count">○</span>' : ''}</td>
