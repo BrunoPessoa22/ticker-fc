@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/styles.css?v=4">
+<link rel="stylesheet" href="/styles.css?v=5">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='42' fill='none' stroke='%232FBF71' stroke-width='9'/><path d='M50 26l19 14-7 22H38l-7-22z' fill='%23EAF1E6'/></svg>">
 </head>
 <body>
@@ -51,6 +51,19 @@
       </table>
     </div>
     <p class="table-note">Market caps in EUR, computed live from price × shares (18 Aug 2026 share-count snapshot). Revenue = FY2024-25 club accounts, excluding player-trading income where the club separates it. EV = market cap + net financial debt (latest accounts; net cash reduces it) — the multiple that actually compares clubs across capital structures. ○ marks stale or approximate share counts; — means the figure isn't disclosed. Prices delayed 15-20 min (Yahoo Finance).</p>
+  </section>
+
+  <section class="study" aria-label="Match-impact study">
+    <h2 class="section-title">Does winning move the price?</h2>
+    <div class="headline-facts study-facts">
+      <dl class="fact"><dd class="neg">−145 bps</dd><dt>day after a loss</dt></dl>
+      <dl class="fact"><dd class="neg">−109 bps</dd><dt>day after a draw</dt></dl>
+      <dl class="fact"><dd class="pos">+19 bps</dd><dt>day after a win</dt></dl>
+      <dl class="fact"><dd>−1 bps</dd><dt>expected win — priced in</dt></dl>
+      <dl class="fact"><dd class="pos">+174 bps</dd><dt>underdog win</dt></dl>
+      <dl class="fact"><dd class="neg">−252 bps</dd><dt>derby loss</dt></dl>
+    </div>
+    <p class="table-note">Event study, Aug 2026: 2,504 league matches, 14 clubs, five seasons (2021–26) — next-trading-day returns, beta-adjusted against each club’s home index, expectations from Bet365 odds. Losses hurt ~8× more than wins help, and only surprises move the price: a favourite winning is worth nothing. Fenerbahçe is the most result-sensitive stock (+716 bps win-loss spread); Man United barely reacts (+23 bps — it trades on its takeover story); Portugal’s micro-floats price nothing at all. <a href="https://github.com/BrunoPessoa22/ticker-fc/tree/main/research/event-study-aug2026">Method &amp; data</a>.</p>
   </section>
 
   <section class="graveyard" aria-label="No longer on the exchange">
