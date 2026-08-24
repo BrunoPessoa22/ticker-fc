@@ -17,3 +17,6 @@ One entry per refresh run (monthly launchd job `com.brunopessoa.tickerfc-refresh
 - Next expected drops: Spanish club results (Real Madrid ~mid-July already in; Athletic
   late Sep; Barça assembly Oct; SAD juntas Dec), Bayern AGM Nov, Rangers Nov, Italian
   approvals Oct-Dec, Schalke Oct.
+- Shipped 24 Aug 2026 (commit e84b0b7), Coolify deployment p8u4aa3j1n0qqz9oqrztfbyd
+  verified live (63 private rows on prod). Go-live radar email sent to
+  bruno.pessoa@chiliz.com (Resend 61da01e7). Estimates backfilled: 28/63 rows.
