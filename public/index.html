@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Ticker FC — the football stock market</title>
-<meta name="description" content="Every publicly listed football club on one page: live prices, crypto-style charts, market caps and revenue multiples.">
+<meta name="description" content="Every publicly listed football club priced live — plus the private league on its audited books: revenue, results, debt and estimated valuations for 60+ clubs.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/styles.css?v=5">
+<link rel="stylesheet" href="/styles.css?v=6">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='42' fill='none' stroke='%232FBF71' stroke-width='9'/><path d='M50 26l19 14-7 22H38l-7-22z' fill='%23EAF1E6'/></svg>">
 </head>
 <body>
@@ -17,7 +17,7 @@
 
 <header class="masthead">
   <h1 class="wordmark">TICKER&nbsp;FC</h1>
-  <p class="tagline">Every publicly listed football club, priced live.</p>
+  <p class="tagline">Every listed football club priced live — and the private league on its audited books.</p>
   <div class="headline-facts" id="facts"></div>
 </header>
 
@@ -53,6 +53,35 @@
     <p class="table-note">Market caps in EUR, computed live from price × shares (18 Aug 2026 share-count snapshot). Revenue = FY2024-25 club accounts, excluding player-trading income where the club separates it. EV = market cap + net financial debt (latest accounts; net cash reduces it) — the multiple that actually compares clubs across capital structures. ○ marks stale or approximate share counts; — means the figure isn't disclosed. Prices delayed 15-20 min (Yahoo Finance).</p>
   </section>
 
+  <section class="league private-league" aria-label="Private clubs">
+    <div class="league-bar">
+      <h2 class="section-title">The private league</h2>
+      <div class="sorters" role="group" aria-label="Sort private table">
+        <button class="sorter is-active" data-psort="rev">Revenue</button>
+        <button class="sorter" data-psort="est">Est. value</button>
+        <button class="sorter" data-psort="result">Net result</button>
+      </div>
+    </div>
+    <div class="table-scroll">
+      <table class="standings">
+        <thead>
+          <tr>
+            <th class="col-pos">#</th>
+            <th class="col-club">Club</th>
+            <th class="col-exch">Listed on</th>
+            <th class="col-num">Revenue</th>
+            <th class="col-num">Net result</th>
+            <th class="col-num col-nd">Net debt</th>
+            <th class="col-num">Est. value</th>
+            <th class="col-num col-estrev">Est. EV/Rev</th>
+          </tr>
+        </thead>
+        <tbody id="privateRows"></tbody>
+      </table>
+    </div>
+    <p class="table-note">No ticker, no price — these clubs publish anyway. Statutory filings (Companies House, Registro delle Imprese, Belgium's National Bank), league regulators that publish every club's audited accounts (France's DNCG, Germany's DFL), member-club assemblies (Real Madrid, Barcelona, River, Boca) and Brazil's legal requirement to publish audited balanços. Revenue excludes player-trading income where the accounts separate it; ▸ marks all-in figures that don't. Est. value = enterprise-value <em>estimates</em> from Sportico (Apr 2026), Football Benchmark (May 2026) and Forbes (May 2026) — nobody pays those prices on an exchange. The listed league above trades at a median ~1.3× revenue; the estimate industry marks the private giants at 4-6×. One of those numbers is wrong. † marks accounts with a caveat — hover to read it.</p>
+  </section>
+
   <section class="study" aria-label="Match-impact study">
     <h2 class="section-title">Does winning move the price?</h2>
     <div class="headline-facts study-facts">
@@ -72,7 +101,7 @@
   </section>
 
   <footer class="foot">
-    <p>Fundamentals compiled 18 Aug 2026 from FY2024-25 club accounts (Turkish clubs FY to May 2026, inflation-restated). Listed entities are often football subsidiaries with thin free floats — a market cap here is a price, not a valuation. Nothing on this page is investment advice.</p>
+    <p>Fundamentals compiled 18-24 Aug 2026 from FY2024-25 club accounts (Turkish clubs FY to May 2026, inflation-restated; Brazil and other calendar-year clubs per their latest published statements, converted to EUR at 24 Aug 2026 rates). Listed entities are often football subsidiaries with thin free floats — a market cap here is a price, not a valuation. Private-club valuations are third-party estimates. Nothing on this page is investment advice.</p>
     <p>Built by Bruno Pessoa · <a href="https://brunopessoa.com">brunopessoa.com</a></p>
   </footer>
 </main>
@@ -123,6 +152,6 @@
 </aside>
 
 <script src="/vendor/lightweight-charts.standalone.production.js?v=1"></script>
-<script src="/app.js?v=4"></script>
+<script src="/app.js?v=5"></script>
 </body>
 </html>

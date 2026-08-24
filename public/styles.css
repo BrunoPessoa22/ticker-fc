@@ -139,6 +139,10 @@ main { max-width: 1080px; margin: 0 auto; padding: 0 20px 60px; }
 .approx-mark { color: var(--faint); margin-left: 3px; }
 .table-note { margin-top: 12px; font-size: 12.5px; color: var(--faint); max-width: 74ch; }
 
+/* ---- private league ---- */
+.private-league { margin-top: 56px; }
+.private-league tbody tr { cursor: default; }
+
 /* ---- study ---- */
 .study { margin-top: 56px; }
 .study-facts { margin-top: 14px; }
@@ -231,7 +235,8 @@ main { max-width: 1080px; margin: 0 auto; padding: 0 20px 60px; }
 .fund-note { margin-top: 16px; font-size: 13px; color: var(--muted); max-width: 60ch; }
 
 @media (max-width: 700px) {
-  .col-rev, .td-rev, .col-caprev, .td-caprev, .col-exch, .td-exch { display: none; }
+  .col-rev, .td-rev, .col-caprev, .td-caprev, .col-exch, .td-exch,
+  .col-nd, .td-nd, .col-estrev, .td-estrev { display: none; }
   .sub-exch { display: inline; }
   .standings { min-width: 520px; }
   .drawer { padding: 18px 16px 30px; }

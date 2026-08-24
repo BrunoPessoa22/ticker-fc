@@ -1,6 +1,6 @@
 const express = require('express');
 const path = require('path');
-const { CLUBS, FX_CURRENCIES, OFF_EXCHANGE } = require('./data/clubs');
+const { CLUBS, FX_CURRENCIES, OFF_EXCHANGE, PRIVATE_CLUBS } = require('./data/clubs');
 const { fetchChart, fetchQuote, pool, RANGES } = require('./lib/yahoo');
 
 const app = express();
@@ -12,6 +12,16 @@ app.disable('x-powered-by');
 app.use(express.static(path.join(__dirname, 'public'), { maxAge: 0, etag: true, index: 'index.html' }));
 
 const CLUB_BY_ID = new Map(CLUBS.map((c) => [c.id, c]));
+
+// Private clubs are static per data compile — no quotes, no FX at runtime.
+// estEvRev uses the comparison revenue: all-in where the accounts don't
+// separate player trading, ex-transfers otherwise (mirrors Sportico/Forbes
+// revenue bases loosely; it's an estimate over an estimate — labeled as such).
+const PRIVATE_LEAGUE = PRIVATE_CLUBS.map((c) => {
+  const rev = c.revenueEurM ?? c.revIncl ?? null;
+  const estEvRev = c.estValueEurM != null && rev ? c.estValueEurM / rev : null;
+  return { ...c, estEvRev };
+});
 
 // EUR per unit of quote currency, e.g. rates.USD = 0.863 means $1 = €0.863.
 async function fetchFxRates() {
@@ -62,7 +72,7 @@ app.get('/api/clubs', async (_req, res) => {
         live: !!q, marketTime: q?.marketTime ?? null,
       };
     });
-    res.json({ asOf: now, clubs, offExchange: OFF_EXCHANGE });
+    res.json({ asOf: now, clubs, offExchange: OFF_EXCHANGE, privateClubs: PRIVATE_LEAGUE });
   } catch (err) {
     res.status(502).json({ error: 'quote engine unavailable', detail: String(err.message || err) });
   }

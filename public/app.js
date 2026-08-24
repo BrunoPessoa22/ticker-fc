@@ -12,7 +12,9 @@
   };
 
   let clubs = [];
+  let privateClubs = [];
   let sortKey = 'mcap';
+  let pSortKey = 'rev';
   let selected = null;      // club object currently in the drawer
   let currentRange = '1d';
   let futureOn = false;
@@ -42,9 +44,11 @@
     if (!res.ok) throw new Error('clubs fetch failed');
     const json = await res.json();
     clubs = json.clubs;
+    privateClubs = json.privateClubs || [];
     renderTape();
     renderFacts();
     renderTable();
+    renderPrivate();
     renderGraveyard(json.offExchange);
     if (selected) {
       const fresh = clubs.find((c) => c.id === selected.id);
@@ -79,7 +83,8 @@
       <dl class="fact"><dd>${fmtMult(median)}</dd><dt>median cap / revenue</dt></dl>
       <dl class="fact"><dd>${fmtMult(evMedian)}</dd><dt>median EV / revenue</dt></dl>
       ${best ? `<dl class="fact"><dd class="${pctClass(best.dayPct)}">${best.short} ${fmtPct(best.dayPct)}</dd><dt>top 24h</dt></dl>` : ''}
-      ${worst ? `<dl class="fact"><dd class="${pctClass(worst.dayPct)}">${worst.short} ${fmtPct(worst.dayPct)}</dd><dt>bottom 24h</dt></dl>` : ''}`;
+      ${worst ? `<dl class="fact"><dd class="${pctClass(worst.dayPct)}">${worst.short} ${fmtPct(worst.dayPct)}</dd><dt>bottom 24h</dt></dl>` : ''}
+      ${privateClubs.length ? `<dl class="fact"><dd>${privateClubs.length}</dd><dt>private clubs on the books</dt></dl>` : ''}`;
   }
 
   // ---------- league table ----------
@@ -106,6 +111,45 @@
         <td class="td-num td-mult">${fmtMult(c.evRev)}</td>
       </tr>`).join('');
     $('rows').innerHTML = rows;
+  }
+
+  // ---------- private league ----------
+  const pRev = (c) => c.revenueEurM ?? c.revIncl ?? null;
+  const pSortFns = {
+    rev: (a, b) => (pRev(b) ?? -1) - (pRev(a) ?? -1),
+    est: (a, b) => (b.estValueEurM ?? -1) - (a.estValueEurM ?? -1),
+    result: (a, b) => (b.netResultEurM ?? -1e9) - (a.netResultEurM ?? -1e9),
+  };
+
+  function renderPrivate() {
+    const el = $('privateRows');
+    if (!el) return;
+    el.innerHTML = [...privateClubs].sort(pSortFns[pSortKey]).map((c, i) => {
+      const rev = pRev(c);
+      const allIn = c.revenueEurM == null && c.revIncl != null;
+      const revCell = rev == null ? '—'
+        : `${fmtEurM(rev)}${(allIn || c.basis === 'incl') ? '<span class="approx-mark" title="all-in figure — accounts don’t separate player-trading income">▸</span>' : ''}${c.basis === 'gross' ? '<span class="approx-mark" title="gross result — the only disclosed line, not turnover">▸</span>' : ''}`;
+      const nr = c.netResultEurM;
+      const resCell = nr == null ? '—'
+        : `<span class="${nr >= 0 ? 'pct-up' : 'pct-down'}">${nr >= 0 ? '+' : '−'}${fmtEurM(Math.abs(nr))}</span>${c.flag ? `<span class="approx-mark" title="${c.flag.replace(/"/g, '&quot;')}">†</span>` : ''}`;
+      const nd = c.netDebtEurM;
+      const ndCell = nd == null ? '—' : nd < 0 ? `net cash ${fmtEurM(-nd)}` : fmtEurM(nd);
+      const estCell = c.estValueEurM == null ? '—'
+        : `<span title="${(c.estSource || '').replace(/"/g, '&quot;')}">${fmtEurM(c.estValueEurM)}</span>${c.approx ? '<span class="approx-mark" title="approximate">○</span>' : ''}`;
+      return `
+      <tr title="${(c.note || '').replace(/"/g, '&quot;')}">
+        <td class="td-pos">${i + 1}</td>
+        <td class="td-club"><span class="club-line"><span class="chip" style="background:${c.color}"></span>
+          <span><span class="club-name">${c.name}</span><br><span class="club-sub">${c.league} · ${c.country} · FY${c.revFY}</span></span>
+        </span></td>
+        <td class="td-exch">Private</td>
+        <td class="td-num">${revCell}</td>
+        <td class="td-num">${resCell}</td>
+        <td class="td-num td-nd">${ndCell}</td>
+        <td class="td-num">${estCell}</td>
+        <td class="td-num td-estrev">${fmtMult(c.estEvRev)}</td>
+      </tr>`;
+    }).join('');
   }
 
   function renderGraveyard(list) {
@@ -287,10 +331,16 @@
   }
 
   // ---------- events ----------
-  document.querySelectorAll('.sorter').forEach((btn) => btn.addEventListener('click', () => {
+  document.querySelectorAll('.sorter[data-sort]').forEach((btn) => btn.addEventListener('click', () => {
     sortKey = btn.dataset.sort;
-    document.querySelectorAll('.sorter').forEach((b) => b.classList.toggle('is-active', b === btn));
+    document.querySelectorAll('.sorter[data-sort]').forEach((b) => b.classList.toggle('is-active', b === btn));
     renderTable();
+  }));
+
+  document.querySelectorAll('.sorter[data-psort]').forEach((btn) => btn.addEventListener('click', () => {
+    pSortKey = btn.dataset.psort;
+    document.querySelectorAll('.sorter[data-psort]').forEach((b) => b.classList.toggle('is-active', b === btn));
+    renderPrivate();
   }));
 
   $('rows').addEventListener('click', (e) => {
