@@ -1,5 +1,7 @@
-// Club registry — fundamentals from FY2024-25 club accounts (year ended 30 Jun 2025
-// unless noted), compiled 18 Aug 2026. Prices/market caps are computed live from
+// Club registry — fundamentals from the latest published club accounts (FY2024-25,
+// year ended 30 Jun 2025, unless revFY says otherwise; FY2025-26 where the club has
+// already reported). Compiled 18 Aug 2026, last refreshed 3 Sep 2026.
+// Prices/market caps are computed live from
 // Yahoo Finance quotes x sharesM. sharesM derived from the 18 Aug 2026 market-cap
 // snapshot at that day's price, so live MC tracks price moves but inherits any
 // snapshot error; approx:true marks clubs where the snapshot itself was stale.
@@ -19,10 +21,10 @@ const CLUBS = [
   {
     id: 'bvb', name: 'Borussia Dortmund', short: 'BVB', country: 'Germany',
     symbol: 'BVB.DE', exchange: 'Xetra', ccy: 'EUR', sharesM: 110.2, color: '#FDE100',
-    revenueEurM: 526, revFY: '2024/25',
-    netDebtEurM: 14,
-    netResultEurM: 6.5,
-    note: 'Only listed Bundesliga club. Record revenue year; low debt, 53% equity ratio.',
+    revenueEurM: 460, revFY: '2025/26',
+    netDebtEurM: null,
+    netResultEurM: -21.7,
+    note: 'Only listed Bundesliga club. Revenue fell €65M after the Champions League last-16 exit and no Club World Cup — first loss since 2021/22. Equity still ~€300M (>50% ratio) with no new borrowing; the 21 Aug 2026 preliminary release does not give a year-end net debt figure, so EV is blank until the full Geschäftsbericht.',
     lastKnown: 3.15,
   },
   {
@@ -49,7 +51,7 @@ const CLUBS = [
     revenueEurM: 162, revIncl: 274, revFY: '2024/25',
     netResultEurM: -201.2,
     netDebtEurM: 577,
-    note: 'Ex OL Groupe. Net debt ~€600M+ — enterprise value is ~3x the market cap; Michele Kang era after the 2025 DNCG scare.',
+    note: 'Ex OL Groupe. Net debt ~€600M+ — enterprise value is ~3x the market cap; Michele Kang era after the 2025 DNCG scare. Botafogo sued the club in French courts in Apr 2026 for €125M it says was moved to Lyon; the Eagle parent’s Bidco is in administration.',
     lastKnown: 1.83,
   },
   {
@@ -198,8 +200,9 @@ const CLUBS = [
   {
     id: 'gks', name: 'GKS Katowice', short: 'GKS', country: 'Poland',
     symbol: 'GKS.WA', exchange: 'NewConnect', ccy: 'PLN', sharesM: 101.6, color: '#FDB913',
-    revenueEurM: 9.7, revFY: '2024',
-    note: 'Multi-sport club (football, hockey, volleyball); tiny free float.', approx: true,
+    revenueEurM: 7.0, revFY: '2025',
+    netResultEurM: -2.1,
+    note: 'Multi-sport club (football, hockey, volleyball); tiny free float. Audited 2025 statements: sales PLN 30.5M (+71% on promotion and the new municipal stadium), net loss PLN 9.1M.', approx: true,
     lastKnown: 0.19,
   },
   {
@@ -249,19 +252,21 @@ const FX_CURRENCIES = ['USD', 'GBP', 'TRY', 'DKK', 'SEK', 'PLN', 'CLP', 'IDR'];
 // Latest FY per club (FY2024-25 ended Jun 2025 unless revFY says otherwise;
 // Brazil = CY2025 balanços). All figures pre-converted to EUR at 24 Aug 2026
 // rates: GBP 1.1692, USD 0.8566, BRL 0.16614, ARS 0.00057, SEK 0.0903,
-// DKK 0.1338, CHF 1.0680. revenueEurM excludes player-trading income where
+// DKK 0.1338, CHF 1.0680; rows refreshed 3 Sep 2026 use that day's spot
+// (GBP 1.1631, USD 0.8614). revenueEurM excludes player-trading income where
 // the club separates it (revIncl = all-in); basis:'incl' marks accounts that
 // don't separate it (Italian valore della produzione, Belgian opbrengsten),
 // basis:'gross' marks DFL Rohergebnis (gross result, not turnover).
 // estValueEurM = enterprise-value ESTIMATE (Sportico 22 Apr 2026 primary,
-// Forbes 29 May 2026 fallback) — an estimate, never a market price.
+// Forbes 29 May 2026 fallback) — an estimate, never a market price, except
+// where estSource cites an actual transaction (Liverpool, Rangers).
 // Sources & method: research/private-clubs-aug2026.md
 const PRIVATE_CLUBS = [
   // --- England (Companies House statutory accounts, free) ---
   { id: 'liverpool', name: 'Liverpool', short: 'LIV', country: 'England', league: 'Premier League', color: '#C8102E',
     revenueEurM: 822, revFY: '2024/25', netResultEurM: 9, netDebtEurM: 333,
-    estValueEurM: 4920, estSource: 'Sportico enterprise-value estimate, Apr 2026',
-    note: 'Owner FSG. Record £703M revenue — the Premier League’s highest. £218M of the debt is an interest-free FSG loan.' },
+    estValueEurM: 6400, estSource: 'Implied by the Aug 2026 sale of 30% to 1892 Holdings (£1.65B → £5.5B club valuation)',
+    note: 'Owner FSG, which sold 30% in Aug 2026 to 1892 Holdings (Amit Bhatia, Bezos’ K5 Sports, the Saverins’ EE Capital, Mittal trusts) for £1.65B — a record football valuation, and a transaction print rather than an estimate. Record £703M revenue; £218M of the debt is an interest-free FSG loan.' },
   { id: 'mancity', name: 'Manchester City', short: 'MCI', country: 'England', league: 'Premier League', color: '#6CABDD',
     revenueEurM: 812, revFY: '2024/25', netResultEurM: -12, netDebtEurM: null,
     estValueEurM: 4880, estSource: 'Sportico enterprise-value estimate, Apr 2026',
@@ -305,9 +310,9 @@ const PRIVATE_CLUBS = [
 
   // --- Spain (member clubs + self-publishing SADs) ---
   { id: 'realmadrid', name: 'Real Madrid', short: 'RMA', country: 'Spain', league: 'La Liga', color: '#FEBE10',
-    revenueEurM: 1185, revFY: '2024/25', netResultEurM: 24, netDebtEurM: 12, flag: 'Bernabéu financing (€1.13B drawn) is reported separately from the club’s "net debt".',
+    revenueEurM: 1221, revIncl: 1266, revFY: '2025/26', netResultEurM: 26, netDebtEurM: 9, flag: 'Bernabéu financing (€1.11B outstanding at 30 Jun 2026) is reported separately from the club’s "net debt".',
     estValueEurM: 6600, estSource: 'Sportico enterprise-value estimate, Apr 2026',
-    note: 'Member-owned. World football’s first €1B+ operating revenue (ex player sales). Club-defined net debt €12M — the €1.13B Bernabéu loan sits outside it.' },
+    note: 'Member-owned. First sports club past €1.2B of operating revenue (ex player sales), +3.1%; record €287M EBITDA, 26th straight profitable year. Club-defined net debt €9M on €83M of cash — the €1.11B Bernabéu loan sits outside it. The stadium alone billed €363M, ~41% of ordinary revenue.' },
   { id: 'barcelona', name: 'FC Barcelona', short: 'BAR', country: 'Spain', league: 'La Liga', color: '#A50044',
     revenueEurM: 975, revIncl: 994, revFY: '2024/25', netResultEurM: -17, netDebtEurM: 469, flag: 'Total balance-sheet debt ≈€2.6B including Espai Barça financing.',
     estValueEurM: 5700, estSource: 'Sportico enterprise-value estimate, Apr 2026',
@@ -479,7 +484,7 @@ const PRIVATE_CLUBS = [
   { id: 'botafogo', name: 'Botafogo', short: 'BOT', country: 'Brazil', league: 'Série A', color: '#D9D9D9',
     revenueEurM: 116, revIncl: 239, revFY: '2025', netResultEurM: -48, netDebtEurM: 316, flag: 'Auditor BDO abstained from an opinion — going-concern doubt.',
     estValueEurM: null, estSource: null,
-    note: 'SAF — John Textor / Eagle Football. Record revenue on R$ 733M of player sales, but ~R$ 1.9B of debt and an auditor abstention. An Eagle US IPO would make it indirectly tradable.' },
+    note: 'SAF — Eagle Football Holdings still owns 90%, but Textor lost control in Apr 2026 (FGV arbitration) and was voted off the board in Jun 2026; a court-appointed administrator runs the company. Record revenue on R$ 733M of player sales against ~R$ 1.9B of debt and an auditor abstention. The Eagle US IPO that would have made it indirectly tradable is dead — Eagle’s Bidco went into administration in Mar 2026.' },
   { id: 'saopaulo', name: 'São Paulo', short: 'SPFC', country: 'Brazil', league: 'Série A', color: '#C8102E',
     revenueEurM: 133, revIncl: 178, revFY: '2025', netResultEurM: 9, netDebtEurM: 143, flag: 'Balanço rejected by the club’s deliberative council; published regardless.',
     estValueEurM: null, estSource: null,

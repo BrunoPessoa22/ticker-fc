@@ -149,6 +149,14 @@ Big five: England 20/20, Italy 20/20, Germany 18/18, France 18/18, Spain ~10/20 
 - Apr: DNCG comptes individuels (France, prior FY); Brazilian balanços (by 30 Apr); Sportico Top 50.
 - May–Jul: DFL Finanzkennzahlen; Forbes; Football Benchmark; EY Brazil compilation.
 - Jul: Real Madrid announcement. Sep–Dec: Athletic (Sep), Barça assembly + Vitória (Oct), Bayern AGM + Rangers (Nov), Spanish SAD juntas + Atlético (Dec).
+- **Aug–Oct: the June-FYE listed wall** — added 3 Sep 2026 after the Aug run missed it.
+  Clubs with a 30 Jun year end report on a much shorter clock than the private ones, and
+  they are the rows most likely to go stale unnoticed: BVB Bilanzpressekonferenz (~21 Aug,
+  preliminary; full Geschäftsbericht ~Oct), Manchester United Q4/FY (~mid-Sep), Celtic
+  (~mid–late Sep), Lazio (CdG ~15–22 Sep), Juventus (CdA ~24–30 Sep), Brøndby (~24 Sep),
+  AGF (Sep–Oct), Ajax (Sep–Oct), Portuguese SADs R&C (Oct). Check all of these every
+  September regardless of what the private-league calendar says.
+- Turkish four run 1 Jun – 31 May; KAP annual filings land ~Aug (compiled by Forbes Türkiye).
 
 ## Addendum (24 Aug 2026, second pass) — valuation backfill + gap fills
 - Sportico full top-50 recovered from their own data CSV
@@ -168,3 +176,32 @@ Big five: England 20/20, Italy 20/20, Germany 18/18, France 18/18, Spain ~10/20 
   ~R$ 502.6M incl R$ 123.8M net player sales; Boca FY121 total recursos ARS 237.6bn;
   Midtjylland discloses only gross profit DKK 270.7M (abbreviated §32 accounts) — shown
   with a gross-result flag.
+
+## Addendum (3 Sep 2026) — FY2025/26 roll-forward begins
+- **Real Madrid FY2025/26** (accounts formulated 28 Jul 2026): operating revenue ex-transfers
+  €1,221.3M (+3.1%), total incl. €45M transfer gains €1,266.3M, net profit €26.3M, EBITDA
+  €287.4M (record), club-defined net debt €8.7M on €82.8M cash, equity €624.4M, €475M of
+  undrawn credit lines, 26th consecutive profitable year. Bernabéu: total cost €1,347M,
+  €38M of principal amortised, **€1,108.4M outstanding** (was €1,131.7M) — still reported
+  outside "net debt". Stadium revenue €363M (+11%), ~41% of ordinary revenue; commercial
+  €539M (+6%). First club past €1.2B.
+- **Liverpool valuation is now a transaction, not an estimate.** 14 Aug 2026: FSG sold 30%
+  to 1892 Holdings (Amit Bhatia lead + vice-chairman; Bezos' K5 Sports; EE Capital, the
+  Saverin family office; Mittal family trusts) for **£1.65B → £5.5B / ~$7.45B** club
+  valuation. FSG retains majority ownership and operational control. Record for a football
+  club investment. The club release confirms the parties and the date but discloses no
+  terms; the price comes from ESPN / Inside World Football / Sportico. Reported option for
+  the consortium to go majority at ~$8B within 12 months is single-sourced — not encoded.
+  → The `estValueEurM` column now mixes two bases; `estSource` is the discriminator, and
+  a transaction print should always beat a Sportico/Forbes/Football Benchmark estimate.
+- **Eagle Football's multi-club structure has collapsed** — relevant to two rows.
+  Eagle Football Holdings Bidco into administration (Cork Gully) 27 Mar 2026; Botafogo
+  sued Olympique Lyonnais in the French courts 4 Apr 2026 for **€125M** (~R$ 745M) it
+  alleges was moved out of Brazil to fund Lyon; Textor stripped of SAF control 23 Apr 2026
+  by the FGV arbitral tribunal; *interventor judicial* in place since 28 Apr (Durcésio
+  Mello → Eduardo Iglesias); Textor/Weston/Fikesenbaum voted off the Botafogo board at a
+  late-Jun 2026 EGM. Eagle still owns 90% of the SAF, the club 10%. **The Eagle US IPO is
+  dead** — delete it from the "would make Botafogo indirectly tradable" watchlist.
+  EFG.PA itself is unaffected as a listing and still trades on Euronext Paris.
+- Still zero Brazilian SAFs listed on B3 (six SAFs in Série A 2026). The next-wave thesis
+  is unchanged but now has no Eagle shortcut attached to it.
