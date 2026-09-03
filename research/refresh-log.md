@@ -125,3 +125,9 @@ items had already landed *before* the 24 Aug run and were missed by it.
 - Sanity: `node -e "require('./data/clubs')"` OK; `PORT=3199 node server.js` → /api/health
   `{"ok":true,"clubs":27}`, /api/clubs 27 listed + 63 private, BVB EV/evRev correctly null.
 - No HTML/CSS/JS changes, so no `?v=` bump.
+- Pushed 53d25f4 to origin/main. Coolify deployment `tp43kl87ayuepwqwh52o8o8h` queued and
+  verified live within ~20s: /api/health `{"ok":true,"clubs":27}`, prod /api/clubs returns
+  BVB 460 / FY2025/26 and Liverpool est. 6400.
+- Radar email sent to bruno.pessoa@chiliz.com, subject "Ticker FC radar — September 2026"
+  (Resend id `01a06637-ef2c-77d2-bd79-b9c3ec5e9190`). Signal on both counts: figures
+  changed this run, and the September June-FYE wall is inside the 5-week window.
