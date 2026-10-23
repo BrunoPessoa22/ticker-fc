@@ -3,6 +3,39 @@
 One entry per refresh run (monthly launchd job `com.brunopessoa.tickerfc-refresh`,
 3rd of each month 09:17; instructions in `~/bin/tickerfc-refresh-prompt.md`).
 
+## 2026-10-23 — Porto correction and visible data dates
+
+Origin: Bruno asked whether the live site was current, specifically Porto, then requested
+the fix. Quotes were updating, but Porto remained on FY2024/25 after its next annual report.
+
+- Porto FY2025/26, year ended 30 Jun 2026, report published 9 Oct 2026 and checked 23 Oct:
+  revenue excluding player trading EUR150.283M; including player-trading income EUR247.210M
+  (150.283 + 96.927); net result attributable to parent shareholders **−EUR26.262M**.
+  The headline consolidated loss before minority interests is −EUR21.099M; these bases
+  must not be interchanged. Source: [FC Porto annual report, mirrored ESEF filing](https://financialfilings.com/filings/futebol-clube-porto/annual-report-esef/2026/69518081/),
+  consolidated income statement pp. 260–261 and note 28.
+- Comparable debt-minus-cash: borrowings EUR248.341M (note 19) minus cash EUR19.538M
+  (consolidated balance sheet) = **EUR228.803M**, excluding leases. The club's EUR220.8M
+  headline also deducts EUR7.963M of other financial assets. Kept the prior debt-minus-cash
+  basis and documented it explicitly. Share count confirmed at 22.5M in note 17.
+- Added accounting period, source publication date, actual review date, source link and
+  accounting-basis labels for Porto. No other club was researched in this correction;
+  89 existing rows lack per-club review dates and remain explicitly unverified. The prior
+  September partial review is not used as a blanket review date for all clubs.
+- UI distinguishes fiscal years/review dates from last-trade and quote-retrieval dates.
+  Reviews expire after 35 days. Cached Yahoo responses and historical snapshots no longer
+  masquerade as current retrievals; failed page refreshes are visible.
+- Monthly automation: retained its existing monthly frequency. Hardened the local wrapper
+  with persistent private logs, real exit-code propagation and a 30-minute process-group
+  deadline via scripts/run-refresh.py. Updated its prompt to preserve per-club provenance
+  and verify deployed values, rather than health alone. No paid AI job was invoked.
+- Validation: offline API/freshness/cache-recovery tests; refresh-runner success/failure/
+  timeout/child-termination simulations; desktop/mobile browser checks with recorded
+  quote fixtures; live local API smoke against Yahoo confirmed Porto EUR2.78 with the
+  corrected financials and EV/revenue 1.9387. Read-only review found no remaining bug.
+- Publication: prepared locally; production deployment requires Bruno's approval under
+  the global AGENTS.md push/deploy rule. No email or other outbound message sent.
+
 ## 2026-08-24 — initial private-league load (manual, session)
 - Added PRIVATE_CLUBS: 63 clubs across England (11), Spain (9), Germany (6), France (4),
   Italy (7), NL/Belgium (5), Nordics/CH/AT/PT (7), Brazil (12), Argentina (2).

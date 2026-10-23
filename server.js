@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const { CLUBS, FX_CURRENCIES, OFF_EXCHANGE, PRIVATE_CLUBS } = require('./data/clubs');
 const { fetchChart, fetchQuote, pool, RANGES } = require('./lib/yahoo');
+const { financialReview, REVIEW_INTERVAL_DAYS } = require('./lib/freshness');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -51,8 +52,9 @@ app.get('/api/clubs', async (_req, res) => {
     const now = Date.now();
     const clubs = CLUBS.map((c, i) => {
       const q = quotes[i];
-      const price = q?.price ?? c.lastKnown;
-      const prevClose = q?.prevClose ?? null;
+      const hasQuote = Number.isFinite(q?.price) && q.price > 0;
+      const price = hasQuote ? q.price : c.lastKnown ?? null;
+      const prevClose = hasQuote ? q.prevClose : null;
       const dayPct = price != null && prevClose ? ((price - prevClose) / prevClose) * 100 : null;
       const mcapLocalM = price != null ? price * c.sharesM : null;
       const mcapEurM = toEur(mcapLocalM, c.ccy, rates);
@@ -66,13 +68,28 @@ app.get('/api/clubs', async (_req, res) => {
         symbol: c.symbol, exchange: c.exchange, ccy: c.ccy, color: c.color,
         price, dayPct, mcapEurM, mcRev, netDebtEurM, evEurM, evRev,
         netResultEurM: c.netResultEurM ?? null,
-        high52: q?.high52 ?? null, low52: q?.low52 ?? null,
+        high52: hasQuote ? q.high52 ?? null : null, low52: hasQuote ? q.low52 ?? null : null,
         revenueEurM: c.revenueEurM, revIncl: c.revIncl ?? null, revFY: c.revFY,
         note: c.note, approx: !!c.approx,
-        live: !!q, marketTime: q?.marketTime ?? null,
+        ...financialReview(c, now),
+        netDebtBasis: c.netDebtBasis ?? null,
+        netResultBasis: c.netResultBasis ?? null,
+        live: hasQuote && !q.stale,
+        quoteStatus: hasQuote ? (q.stale ? 'cached' : 'delayed') : price != null ? 'snapshot' : 'unavailable',
+        quoteFetchedAt: hasQuote ? q.fetchedAt ?? null : null,
+        quoteSnapshotAt: !hasQuote && price != null ? '2026-08-18' : null,
+        marketTime: hasQuote ? q.marketTime ?? null : null,
       };
     });
-    res.json({ asOf: now, clubs, offExchange: OFF_EXCHANGE, privateClubs: PRIVATE_LEAGUE });
+    const privateClubs = PRIVATE_LEAGUE.map((c) => ({ ...c, ...financialReview(c, now) }));
+    const allClubs = [...clubs, ...privateClubs];
+    const financialReviews = {
+      intervalDays: REVIEW_INTERVAL_DAYS,
+      reviewed: allClubs.filter((c) => c.financialReviewStatus === 'reviewed').length,
+      overdue: allClubs.filter((c) => c.financialReviewStatus === 'overdue').length,
+      unverified: allClubs.filter((c) => c.financialReviewStatus === 'unverified').length,
+    };
+    res.json({ asOf: now, clubs, offExchange: OFF_EXCHANGE, privateClubs, financialReviews });
   } catch (err) {
     res.status(502).json({ error: 'quote engine unavailable', detail: String(err.message || err) });
   }
@@ -84,7 +101,8 @@ app.get('/api/chart/:id', async (req, res) => {
   const range = RANGES[req.query.range] ? req.query.range : '1d';
   try {
     const { meta, t, c } = await fetchChart(club.symbol, range);
-    res.json({ id: club.id, symbol: club.symbol, ccy: club.ccy, range, prevClose: meta.prevClose, t, c });
+    res.json({ id: club.id, symbol: club.symbol, ccy: club.ccy, range, prevClose: meta.prevClose,
+      fetchedAt: meta.fetchedAt, stale: !!meta.stale, t, c });
   } catch (err) {
     res.status(502).json({ error: 'chart unavailable', detail: String(err.message || err) });
   }
@@ -92,4 +110,8 @@ app.get('/api/chart/:id', async (req, res) => {
 
 app.get('/api/health', (_req, res) => res.json({ ok: true, clubs: CLUBS.length }));
 
-app.listen(PORT, () => console.log(`ticker-fc listening on :${PORT}`));
+if (require.main === module) {
+  app.listen(PORT, () => console.log(`ticker-fc listening on :${PORT}`));
+}
+
+module.exports = app;

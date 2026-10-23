@@ -1,6 +1,6 @@
 // Club registry — fundamentals from the latest published club accounts (FY2024-25,
 // year ended 30 Jun 2025, unless revFY says otherwise; FY2025-26 where the club has
-// already reported). Compiled 18 Aug 2026, last refreshed 3 Sep 2026.
+// already reported). See each row's review metadata and research/refresh-log.md.
 // Prices/market caps are computed live from
 // Yahoo Finance quotes x sharesM. sharesM derived from the 18 Aug 2026 market-cap
 // snapshot at that day's price, so live MC tracks price moves but inherits any
@@ -84,10 +84,17 @@ const CLUBS = [
   {
     id: 'porto', name: 'FC Porto', short: 'POR', country: 'Portugal',
     symbol: 'FCP.LS', exchange: 'Euronext LIS', ccy: 'EUR', sharesM: 22.5, color: '#003E7E',
-    revenueEurM: 150, revIncl: 250, revFY: '2024/25',
-    netResultEurM: 39.2,
-    netDebtEurM: 254,
-    note: 'Record €39M profit on €171M of player sales — but negative equity and €254M net debt. SAD only, thin float.',
+    revenueEurM: 150.283, revIncl: 247.210, revFY: '2025/26',
+    netResultEurM: -26.262,
+    netDebtEurM: 228.803,
+    financialPeriodEnd: '2026-06-30',
+    financialReviewedAt: '2026-10-23',
+    financialSourcePublishedAt: '2026-10-09',
+    financialSourceUrl: 'https://financialfilings.com/filings/futebol-clube-porto/annual-report-esef/2026/69518081/',
+    financialSourceLabel: 'FC Porto SAD annual report 2025/26',
+    netResultBasis: 'Attributable to parent shareholders',
+    netDebtBasis: 'Borrowings minus cash; excludes leases and does not deduct other financial assets',
+    note: 'FY2025/26: €26.3M loss attributable to parent shareholders (€21.1M consolidated loss before minority interests). Revenue excludes €96.9M of player-trading income. Net debt = €248.341M borrowings − €19.538M cash; the club’s €220.8M measure also deducts other financial assets. Negative group equity €29.7M. SAD group, thin float.',
     lastKnown: 2.84,
   },
   {

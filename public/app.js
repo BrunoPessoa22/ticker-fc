@@ -32,11 +32,36 @@
     const d = v >= 1000 ? 0 : v >= 100 ? 1 : v >= 1 ? 2 : 3;
     return v.toLocaleString('en-GB', { minimumFractionDigits: d, maximumFractionDigits: d });
   };
-  const fmtEurM = (m) => m == null ? '—'
+  const fmtEurM = (m, detailed = false) => m == null ? '—'
     : m >= 995 ? `€${(m / 1000).toFixed(2).replace(/0$/, '')}B`
-    : m >= 10 ? `€${Math.round(m)}M`
+    : m >= 10 ? `€${detailed ? m.toFixed(1) : Math.round(m)}M`
     : `€${m.toFixed(1)}M`;
   const fmtMult = (x) => x == null ? '—' : `${x.toFixed(1)}×`;
+  const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (c) => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
+  }[c]));
+  const fmtDate = (value) => value ? new Date(value).toLocaleDateString('en-GB', {
+    day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC',
+  }) : 'unknown';
+  const fmtTime = (value) => value ? `${new Date(value).toLocaleString('en-GB', {
+    day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'UTC',
+  })} UTC` : 'time unavailable';
+  const reviewText = (c) => c.financialReviewStatus === 'reviewed'
+    ? `Checked ${fmtDate(c.financialReviewedAt)}`
+    : c.financialReviewStatus === 'overdue'
+      ? `Review overdue · last checked ${fmtDate(c.financialReviewedAt)}`
+      : 'Review date unavailable';
+  const quoteText = (c) => c.quoteStatus === 'snapshot'
+    ? `Snapshot ${fmtDate(c.quoteSnapshotAt)}`
+    : c.quoteStatus === 'unavailable' ? 'Quote unavailable'
+      : `${c.quoteStatus === 'cached' ? 'Cached · ' : ''}Last trade ${fmtTime(c.marketTime * 1000)}`;
+  function sourceLink(c) {
+    try {
+      const url = new URL(c.financialSourceUrl);
+      if (url.protocol !== 'https:' && url.protocol !== 'http:') return '';
+      return `<a href="${escapeHtml(url.href)}" target="_blank" rel="noopener noreferrer">${escapeHtml(c.financialSourceLabel || 'Source accounts')}</a>`;
+    } catch { return ''; }
+  }
 
   // ---------- data ----------
   async function loadClubs() {
@@ -45,6 +70,10 @@
     const json = await res.json();
     clubs = json.clubs;
     privateClubs = json.privateClubs || [];
+    const reviews = json.financialReviews;
+    if (reviews) {
+      $('reviewSummary').textContent = `Financial reviews: ${reviews.reviewed} checked in the past ${reviews.intervalDays} days; ${reviews.overdue} overdue; ${reviews.unverified} with no recorded review date. Quotes refresh separately.`;
+    }
     renderTape();
     renderFacts();
     renderTable();
@@ -100,10 +129,10 @@
       <tr data-id="${c.id}" tabindex="0" role="button" aria-label="Open ${c.name} chart">
         <td class="td-pos">${i + 1}</td>
         <td class="td-club"><span class="club-line"><span class="chip" style="background:${c.color}"></span>
-          <span><span class="club-name">${c.name}</span><br><span class="club-sub">${c.symbol}<span class="sub-exch"> · ${c.exchange}</span> · ${c.country}</span></span>
+          <span><span class="club-name">${c.name}</span><br><span class="club-sub">${c.symbol}<span class="sub-exch"> · ${c.exchange}</span> · ${c.country}${c.revFY ? ` · FY${escapeHtml(c.revFY)}` : ' · Financial year unavailable'}</span><span class="data-date ${c.financialReviewStatus === 'reviewed' ? '' : 'review-needed'}">${escapeHtml(reviewText(c))}</span></span>
         </span></td>
         <td class="td-exch">${c.exchange}</td>
-        <td class="td-num td-price">${fmtPrice(c.price)}<span class="ccy">${c.ccy}</span></td>
+        <td class="td-num td-price">${fmtPrice(c.price)}<span class="ccy">${c.ccy}</span><span class="data-date ${c.quoteStatus === 'delayed' ? '' : 'review-needed'}">${escapeHtml(quoteText(c))}</span></td>
         <td class="td-num ${pctClass(c.dayPct)}">${fmtPct(c.dayPct)}</td>
         <td class="td-num">${fmtEurM(c.mcapEurM)}${c.approx ? '<span class="approx-mark" title="approximate share count">○</span>' : ''}</td>
         <td class="td-num td-rev">${c.revenueEurM ? `${fmtEurM(c.revenueEurM)}` : '—'}</td>
@@ -140,7 +169,7 @@
       <tr title="${(c.note || '').replace(/"/g, '&quot;')}">
         <td class="td-pos">${i + 1}</td>
         <td class="td-club"><span class="club-line"><span class="chip" style="background:${c.color}"></span>
-          <span><span class="club-name">${c.name}</span><br><span class="club-sub">${c.league} · ${c.country} · FY${c.revFY}</span></span>
+          <span><span class="club-name">${c.name}</span><br><span class="club-sub">${c.league} · ${c.country} · FY${c.revFY}</span><span class="data-date ${c.financialReviewStatus === 'reviewed' ? '' : 'review-needed'}">${escapeHtml(reviewText(c))}${sourceLink(c) ? ` · ${sourceLink(c)}` : ''}</span></span>
         </span></td>
         <td class="td-exch">Private</td>
         <td class="td-num">${revCell}</td>
@@ -183,19 +212,19 @@
     if (!selected) return;
     $('dPrice').innerHTML = `${fmtPrice(selected.price)} <span class="ccy">${selected.ccy}</span>`;
     setHeaderChange();
-    $('fCap').textContent = fmtEurM(selected.mcapEurM) + (selected.approx ? ' ○' : '');
+    $('fCap').textContent = fmtEurM(selected.mcapEurM, true) + (selected.approx ? ' ○' : '');
     $('fRev').textContent = selected.revenueEurM
-      ? fmtEurM(selected.revenueEurM) + (selected.revIncl ? ` (${fmtEurM(selected.revIncl)} incl. transfers)` : '')
+      ? fmtEurM(selected.revenueEurM, true) + (selected.revIncl ? ` (${fmtEurM(selected.revIncl, true)} incl. transfers)` : '')
       : 'not disclosed';
     $('fRevFY').textContent = selected.revFY ? `FY${selected.revFY}` : '';
     $('fMult').textContent = fmtMult(selected.mcRev);
     const nd = selected.netDebtEurM;
-    $('fDebt').textContent = nd == null ? 'n/d' : nd < 0 ? `net cash ${fmtEurM(-nd)}` : fmtEurM(nd);
-    $('fEv').textContent = fmtEurM(selected.evEurM);
+    $('fDebt').textContent = nd == null ? 'n/d' : nd < 0 ? `net cash ${fmtEurM(-nd, true)}` : fmtEurM(nd, true);
+    $('fEv').textContent = fmtEurM(selected.evEurM, true);
     $('fEvRev').textContent = fmtMult(selected.evRev);
     const nr = selected.netResultEurM;
     const resEl = $('fResult');
-    resEl.textContent = nr == null ? 'n/d' : (nr >= 0 ? '+' : '−') + fmtEurM(Math.abs(nr));
+    resEl.textContent = nr == null ? 'n/d' : (nr >= 0 ? '+' : '−') + fmtEurM(Math.abs(nr), true);
     resEl.className = nr == null ? '' : nr >= 0 ? 'pct-up' : 'pct-down';
     $('fResFY').textContent = nr != null && selected.revFY ? `FY${selected.revFY}` : '';
     const el52 = $('f52');
@@ -205,6 +234,11 @@
       el52.className = pctClass(off);
     } else { el52.textContent = 'n/d'; el52.className = ''; }
     $('fNote').textContent = selected.note || '';
+    $('dQuote').textContent = `${quoteText(selected)}${selected.quoteFetchedAt ? ` · Quote fetched ${fmtTime(selected.quoteFetchedAt)}` : ''}${selected.quoteStatus === 'cached' ? ' · Latest fetch failed' : ''}`;
+    $('fReview').textContent = `${reviewText(selected)}${selected.financialPeriodEnd ? ` · Accounts to ${fmtDate(selected.financialPeriodEnd)}` : ''}${selected.financialSourcePublishedAt ? ` · Published ${fmtDate(selected.financialSourcePublishedAt)}` : ''}`;
+    $('fSource').innerHTML = sourceLink(selected);
+    $('fDebtBasis').textContent = selected.netDebtBasis || '';
+    $('fResultBasis').textContent = selected.netResultBasis || '';
   }
 
   function setHeaderChange() {
@@ -272,7 +306,9 @@
       areaSeries.setData(data.t.map((t, i) => ({ time: t, value: data.c[i] })));
       if (futureOn) drawProjection();
       chart.timeScale().fitContent();
-      chartStatus(data.t.length ? '' : 'no data for this range');
+      chartStatus(data.t.length
+        ? data.stale ? `Cached chart · fetched ${fmtTime(data.fetchedAt)}` : ''
+        : 'no data for this range');
       setHeaderChange();
     } catch {
       chartStatus('chart unavailable — retry shortly');
@@ -376,9 +412,12 @@
   // ---------- boot + poll ----------
   loadClubs().catch(() => {
     $('facts').innerHTML = '<p class="table-note">Quote engine warming up — refresh in a few seconds.</p>';
+    $('reviewSummary').textContent = 'Data unavailable. Retrying in one minute.';
   });
   setInterval(() => {
-    loadClubs().catch(() => {});
+    loadClubs().catch(() => {
+      $('reviewSummary').textContent = 'Refresh failed — showing previously loaded values. Check the quote and financial review dates below.';
+    });
     if (selected && currentRange === '1d') loadChart();
   }, POLL_MS);
 })();
