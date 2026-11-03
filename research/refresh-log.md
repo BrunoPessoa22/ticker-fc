@@ -3,6 +3,114 @@
 One entry per refresh run (monthly launchd job `com.brunopessoa.tickerfc-refresh`,
 3rd of each month 09:17; instructions in `~/bin/tickerfc-refresh-prompt.md`).
 
+## 2026-11-03 — monthly refresh #2 (autonomous job)
+Window: 23 Oct → 3 Nov 2026. Calendar slot = "Nov: Bayern AGM + Rangers", but the real
+backlog was the **June-FYE listed wall from Sep–Oct 2026**: the 3 Sep run listed nine of
+these as due inside five weeks and the 23 Oct session only corrected Porto. Seven of them
+had reported and were still showing FY2024/25. All seven are now ingested from primary
+filings where one exists. FX 3 Nov 2026 spot (Yahoo, Mozilla/5.0 UA): GBP/EUR 1.19861
+(EURGBP 0.8343), USD 0.89270, DKK 0.133803.
+
+### Updated (7 listed clubs, all rolled FY2024/25 → FY2025/26)
+- **Manchester United** (MANU) — SEC Form 6-K, released 23 Sep 2026, *primary, read
+  directly*. Revenue £666.5M → **£677.6M** (+1.7%, a record with no European football);
+  adjusted EBITDA £182.8M → **£216.4M** (+18.4%, record); operating result −£18.4M →
+  **+£22.6M**; but loss for the period £33.0M → **£43.0M** because net finance costs went
+  £21.2M → £69.6M. EUR: rev 779 → **812.2**, net −39 → **−51.5**, net debt 636 → **745.2**.
+  The release carries **no net debt line** — figure is borrowings incl. accrued interest
+  (£577.554M non-current + £111.400M current = £689.0M) minus £67.246M cash = **£621.708M**,
+  and `netDebtBasis` now says so. Same basis the prior row used (FY25: £637.0M − £86.1M =
+  £550.9M). USD non-current borrowings $775M, up $125M. FY2027 guided £740–760M.
+- **Celtic** (CCP.L) — Stock Exchange Announcement 22 Sep 2026, *primary PDF, read
+  directly*. Revenue £143.597M → **£111.032M** (−22.7%, Europa League not Champions
+  League); operating profit £42.173M → **−£10.489M**; loss before tax £6.563M; profit
+  after tax £33.934M → **loss of £4.781M**. Opex +4.3% to £122.146M, player-sale gains
+  £31.488M → £16.045M, amortisation up to £15.385M. Cash £77.310M → **£66.385M** against
+  £0.096M borrowings → net cash £66.289M. EUR: rev 168 → **133.1**, net +40 → **−5.7**,
+  net debt −90 → **−79.5**.
+- **Juventus** (JUVE.MI) — CdA approved 29 Sep 2026; figures from the Calcio e Finanza
+  breakdown of 13 Oct 2026 (sanctioned secondary; the club PDF was not needed for these
+  lines). Total ricavi e proventi €529.6M → **€474.7M** (−10.4%: no Club World Cup, player
+  trading €109.7M → €57.8M of which plusvalenze €89.7M → €36.5M). Net loss €58.1M →
+  **€66.0M**, sixth straight. Costs €405.7M → €363.6M; operating result −€39.4M. Net
+  financial debt €280.2M → **€331.1M** incl. leases (€327.6M ex-leases) after €102.4M of
+  transfers and a €23M property purchase. Equity €13.2M → €11.5M; capital increase of up
+  to €250M in play.
+  **Basis correction, flagged on the row:** the stored FY2024/25 revenue of €439M was
+  total *minus plusvalenze only* (529.6 − 89.7), not minus all player-trading income,
+  which contradicted the file header. The row now uses the club's own ex-player-trading
+  basis — **€416.9M**, against a restated €419.9M comparative. So the headline "−10.4%"
+  is a player-trading effect; underlying revenue is flat, and the row says so.
+- **Lazio** (SSL.MI) — Consiglio di Gestione 21–22 Sep 2026, via Teleborsa/Borsa Italiana
+  and Investing's filing summary. Valore della produzione €143.49M → **€131.75M** (−8.18%,
+  no European football): TV €88.45M, matchday €18.06M, sponsorship €17.82M. Added
+  **revIncl €173.7M** (Calcio e Finanza all-in, incl. January plusvalenze). Net loss
+  €17.16M → **€10.04M**. Payroll +6.51% to €104.31M, operating costs €140.59M. Net
+  financial position €66M → **€126.40M** of debt (+€60.10M — which independently confirms
+  the stored €66M was right). Equity positive €113.56M, largely via an **IAS 16 revaluation
+  of the Formello training centre** — noted on the row, since it is what saves the equity.
+- **Ajax** (AJAX.AS) — club release per 30 Jun 2026, *primary PDF, read directly*; PwC
+  unqualified opinion 25 Sep 2026. Netto-omzet €178.1M → **€188.3M** (+€10.2M on Champions
+  League premies); bedrijfslasten €197.5M → €206.5M, so the operating result is still
+  **−€18.2M** (from −€19.4M). Result after tax −€37.3M → **+€2.0M**, essentially all player
+  trading: resultaat vergoedingssommen €10.3M → **€65.5M** (Hato→Chelsea, Brobbey→Sunderland,
+  Taylor→Lazio), saldo after amortisation −€31.0M → **+€26.7M**. Equity €191.0M. Share count
+  in the release is 18,333,333 — **confirms the stored sharesM 18.33**. AVA 10 Nov 2026.
+  **netDebtEurM set to null** (was −40): the release discloses no year-end cash or net
+  financial position, and carrying a FY2024/25 net-cash figure against FY2025/26 revenue is
+  the exact error the BVB row avoided in September. EV/Revenue blank until the jaarverslag.
+- **Benfica** (SLBEN.LS) — R&C 2025/26, reported 8 Sep 2026, approved unanimously at the
+  AG on 2 Oct 2026; figures via Jornal Economico (ojogo 403s on fetch). Operating income
+  ex-player-rights €230.5M → **€214.4M** (−7%); player-rights result **€47.4M** (+1.4%);
+  operating result €32.4M; net result €34.4M → **€19.1M**. Net debt €196.9M → **€184.9M**
+  (−6.1%) — the stored 197 is confirmed as the right prior figure and basis. Assets €649.4M
+  (+9.9%), liabilities €513.9M (+8.2%), equity €135.5M (+16.5%). Record matchday €45.2M.
+  **revIncl basis changed and labelled**: the old €348M was gross transfer proceeds; the new
+  €261.8M is operating income plus the *net* player-rights result, which is what the sources
+  disclose. `revenueBasis` states this on the row so the two are not read as comparable.
+- **SC Braga** (SCB.LS) — R&C approved at the AG on 22 Sep 2026, via RTP/Lusa. Total
+  revenue **€115.682M**, a record and a first above €100M; net result −€11.0M → **+€17.315M**;
+  EBITDA record **€39.614M**; equity €86.335M. Driven by **€67.339M** of net income on player
+  rights (Roger Fernandes, Zalazar, Banza). Liabilities €100.7M → ~€144M. EUR revenueEurM
+  **48.3** = 115.682 − 67.339, an arithmetic split of two reported figures, labelled as such
+  in `revenueBasis`. **netDebtEurM set to null** (was 19): no year-end net debt in the
+  sources used. 2026/27 budget forecasts only €1.56M of profit.
+
+### Checked, no change
+- **BVB** (BVB.DE): the full Geschäftsbericht 2025/26 is **still not out** — only the 21 Aug
+  2026 preliminary ad-hoc. So the September decision stands: revenue €460.5M, net −€21.7M,
+  netDebt null, EV blank. The one IR "Kennzahlen auf einen blick" PDF that surfaced is the
+  FY2025 edition. Carry to the next run; the AGM (normally Nov) should force it out.
+- **Porto** already on FY2025/26 from the 23 Oct correction; not re-researched, review date
+  left at 2026-10-23 rather than restamped.
+- Turkish four (FY 1 Jun – 31 May) already on FY2025/26 from the August KAP filings; next
+  drop ~Aug 2027. Parken/AaB/AIK/GKS are calendar-year — nothing due before Feb–Apr 2027.
+
+### Skipped / open
+- **Sporting CP** (SCP.LS) — **reported but deliberately not encoded.** Net result is well
+  sourced (+€20M → **+€34.7M**, +74%, fifth straight profit, €117M cumulative; published
+  22 Sep 2026; operating result €50.7M, +12%). But the revenue basis could not be resolved:
+  secondaries give "rendimentos operacionais ~€187.7M" *and* a record "volume de negócios"
+  of €300M, and neither reconciles with the stored €148M / revIncl €265M. Encoding the net
+  result alone would have put a FY2025/26 result next to FY2024/25 revenue under a single
+  `revFY`, so the whole row was left on FY2024/25. **Next run: pull the CMVM R&C PDF and
+  resolve the basis — this is the top item.**
+- **Brøndby** (BIF.CO, FY ends ~Jun) and **AGF Aarhus** (AGF-B.CO) FY2025/26: not reached
+  before the deadline. Both were on the September due list. Carry forward.
+- Private clubs: none researched this run (Athletic Club ~late Sep, Barça assembly Oct,
+  Vitória SC, Schalke, Rangers and Bayern AGM Nov are all outstanding). 82 of 90 rows remain
+  `unverified` — that is a backlog, not freshness, and the API counter says so.
+- Non-ASCII in Portuguese/Italian source labels written without accents to keep the diff
+  clean; club notes keep proper accents.
+
+### Ship
+- Sanity: `node -e "require('./data/clubs')"` OK. `PORT=3199 node server.js` → /api/health
+  `{"ok":true,"clubs":27}`; /api/clubs 27 listed + 63 private, live quotes retrieved,
+  EV/Revenue computed for MANU 4.97 / Juve 2.38 / Lazio 1.97 / Benfica 1.57 / Celtic 0.95
+  and correctly **null for Ajax, Braga and BVB** (null net debt). `financialReviews` →
+  reviewed 8, overdue 0, unverified 82.
+- No HTML/CSS/JS change, so no `?v=` bump.
+
 ## 2026-10-23 — Porto correction and visible data dates
 
 Origin: Bruno asked whether the live site was current, specifically Porto, then requested
