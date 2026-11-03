@@ -110,6 +110,27 @@ filings where one exists. FX 3 Nov 2026 spot (Yahoo, Mozilla/5.0 UA): GBP/EUR 1.
   and correctly **null for Ajax, Braga and BVB** (null net debt). `financialReviews` →
   reviewed 8, overdue 0, unverified 82.
 - No HTML/CSS/JS change, so no `?v=` bump.
+- Pushed **45711ec** to origin/main (clean rebase, no divergence).
+- **DEPLOYMENT FAILED — run is incomplete.** `POST /api/v1/deploy` on Coolify returned
+  **HTTP 401** with the wrapper-exported `$COOLIFY_TOKEN` (shape `3|co...`, 39 chars),
+  on the initial call and on one retry. An unauthenticated `GET /api/v1/version` also
+  returns 401, and so does the *authenticated* version call — so the whole API is
+  refusing this credential rather than the deploy route being wrong. Per the standing
+  rule this is treated as an answer, not an obstacle: **no other credential was tried.**
+  To unblock: reissue the Coolify API token (or confirm the API is not IP/scope gated)
+  and re-run the deploy for uuid `j5my92oq9u4v18efzg8vvg5h`.
+- **Production was already stale before this run.** prod `/api/clubs` has no
+  `financialReviews` key and no `financialReviewedAt` fields, and serves Porto at
+  **FY2024/25, net +39.2, debt 254** — i.e. it is running a build from *before* 34d7a02
+  (23 Oct). The 23 Oct session deliberately left deployment for Bruno's approval and it
+  never happened, so the Porto correction has not been live for 11 days and the seven
+  FY2025/26 rolls in this commit are not live either. prod `/api/health` is
+  `{"ok":true,"clubs":27}` — healthy server, year-old data, which is exactly the failure
+  mode the prompt warns about.
+- Radar email **sent** to bruno.pessoa@chiliz.com, subject "Ticker FC radar — November
+  2026", Resend id `01a1a085-6370-76ac-b3d2-a58106f17e37`. Signal on both counts (figures
+  changed; Nov/Dec drops inside five weeks), and the email leads with the deploy failure
+  and the 11-day-stale production site.
 
 ## 2026-10-23 — Porto correction and visible data dates
 
